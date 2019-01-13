@@ -21,6 +21,7 @@ git config --global user.email "mahajan.bhushan1990@gmail.com"
 git config --list
 
 git help clone
+latest
 ===============================================================================
 
 Step4
