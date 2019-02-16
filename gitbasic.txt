@@ -28,6 +28,17 @@ enter passphrase *
 
 copy the public ket to the github in the setting section of SSH/GPG key then submit
 
+****************Output sample **************************
+git clone git@github.com:18414/ansible.git
+Cloning into 'ansible'...
+Warning: Permanently added the RSA host key for IP address '192.30.253.112' to the list of known hosts.
+Enter passphrase for key '/home/gitbaba/.ssh/id_rsa':
+remote: Enumerating objects: 44, done.
+remote: Counting objects: 100% (44/44), done.
+remote: Compressing objects: 100% (28/28), done.
+remote: Total 47 (delta 9), reused 29 (delta 3), pack-reused 3
+Receiving objects: 100% (47/47), 9.50 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (9/9), done.
 
 ******************************************************************************
 *****************************HELP*********************************************
