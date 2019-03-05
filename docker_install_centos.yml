@@ -1,0 +1,59 @@
+---
+  - hosts: centos-docker
+    become: yes
+    become_method: sudo
+    tasks:
+      - name: "add docker repository"
+        get_url:
+          url: https://download.docker.com/linux/centos/docker-ce.repo
+          dest: /etc/yum.repos.d/docker-ce.repo
+          mode: 0644
+          #when: ansible_distribution == "CentOS"
+ 
+      - name: "Ensure old versions of docker are purged 1"
+        yum: name=lxc-docker state=absent 
+        when: ansible_distribution == "CentOS"
+   
+      - name: "Ensure old version of docker are purged 2"
+        yum: name=docker state=absent 
+        when: ansible_distribution == "CentOS"
+  
+      - name: "Ensure old versions of docker are purged 3"
+        yum: name=docker-engine state=absent 
+        when: ansible_distribution == "CentOS"
+ 
+      - name: "Ensure old versions of docker are purged 4"
+        yum: name=docker.io state=absent 
+        when: ansible_distribution == "CentOS"   
+      - name: "get kernel version"
+        shell: uname -r 
+        register: kernel
+
+      - name: "install Docker prerequisite"
+        yum: 
+          name: "{{ item }}" 
+          state: latest
+        with_items:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+
+      - name: "install docker"
+        yum: name=docker-ce  state=present 
+        when: ansible_distribution == "CentOS"
+        retries: 3
+        delay: 20
+
+      - name: "add docker group"
+        group: name=docker state=present
+  
+      - name: "Add centos to docker group"
+        user: name=centos groups=docker append=yes
+  
+      - name: "Start Docker service"
+        service: name=docker state=started
+  
+      - name: "get docker info"
+        shell: docker info
+        register: docker_info
+        changed_when: False 
