@@ -1,0 +1,39 @@
+---
+- name: Create instances "{{ instances }}"
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    service_account_email: 524495382084-compute@developer.gserviceaccount.com
+    credentials_file: /home/centos/static-groove-225809-b8af1b5ce15e.json
+    project_id: static-groove-225809
+    machine_type: n1-standard-1
+    image: centos-7
+    
+  tasks: 
+    - name: Launch instances "{{ instances }}"
+      gce:
+          instance_names: "{{ instances }}"
+          machine_type: "{{ machine_type }}"
+          image: "{{ image }}"
+          service_account_email: "{{ service_account_email }}"
+          credentials_file: "{{ credentials_file }}"
+          project_id: "{{ project_id }}"
+          disk_auto_delete: true
+          preemptible: true
+          tags: ansible
+      register: gce
+
+    - name: Wait for SSH to come up "{{ instances }}"
+      wait_for: host={{ item.public_ip }} port=22 delay=10 timeout=60
+      with_items: "{{ gce.instance_data }}"
+
+    - name: Add host to groupname "{{ instances }}"
+      add_host: hostname={{ item.public_ip }} groupname=new_instances
+      with_items: "{{ gce.instance_data }}"
+    
+    - name: Save host data "{{ instances }}"
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: gce_instances
+      with_items: "{{ gce.instance_data }}"
