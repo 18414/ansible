@@ -39,11 +39,13 @@
           - lvm2
 
       - name: "install docker"
-        yum: name=docker-ce  state=present 
+        yum: name={{ item }} state=present 
         when: ansible_distribution == "CentOS"
         retries: 3
         delay: 20
-
+        with_items: 
+          - docker-ce
+          - docker-python
       - name: "add docker group"
         group: name=docker state=present
   
