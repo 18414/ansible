@@ -7,11 +7,13 @@
         email: "bmahajan0@gmail.com"
         username: "bmahajan"
         password: "ganesha@123"
-    - name: Ensure that container is running 
+    - name: launch container  
       docker_container: 
-        name: apache
+        name: splunksh
         state: started
         image: "bmahajan/splunksh:v2"
         pull: true
+        detach: yes
+        tty: yes
         ports: 
           - "8000:8000"
