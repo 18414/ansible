@@ -1,0 +1,16 @@
+---
+- hosts: apache
+  become: yes
+  gather_facts: no
+  tasks: 
+    - name: Install Apache server
+      yum: 
+        name: httpd
+        state: present
+    - name: start the apache service 
+      service: name=httpd state=started
+    - name: Verify the service status
+      command: systemctl status httpd
+        
+        
+

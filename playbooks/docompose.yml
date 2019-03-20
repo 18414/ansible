@@ -1,0 +1,53 @@
+---
+- hosts: docker
+  user: bhushan
+  sudo: yes
+  gather_facts: no
+  tasks:
+    - name: docker | start db container 
+      docker_container:
+        docker_host: unix://var/run/docker.sock
+        name: db
+        image: mongo
+        ports: 
+          - '27017:27017'
+        volumes: 
+          - /data/db
+
+    - name: docker | Build web container image
+      docker_image:
+        docker_host: unix://var/run/docker.sock
+        path: .
+        name: web
+
+    - name: docker | Start web container 
+      docker_container: 
+        docker_host: unix://var/run/docker.sock
+        name: web
+        image: web
+        command:  bash -c "rm -f tmp/pids/server.pid || true && bundle exec rails s -p 3000 -b '0.0.0.0'"
+        ports: 
+          - '3000:3000'
+        links: 
+          - db
+
+    - name: docker | start Build nginx container image
+      docker_image: 
+        docker_host: unix://var/run/docker.sock
+        path: ./docker/nginx/
+        name: nginx
+
+    - name: docker | Start nginx container 
+      docker_container: 
+        docker_host: unix://var/run/docker.sock 
+        name: nginx
+        image: nginx
+        ports: 
+          - '80:80'
+        links: 
+          - web
+  
+ 
+    
+
+

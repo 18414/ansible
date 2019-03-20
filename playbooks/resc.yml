@@ -1,0 +1,13 @@
+---
+- hosts: apache
+  become: yes  
+  tasks:
+  - name: copy file dest
+    block: 
+    - copy: 
+        src: /home/ansible/playbooks/ignore.txt
+        dest: /home/ansible
+      rescue: 
+        - debug: msg="The file does not exists"
+      always: 
+        - debug: msg="Play done!"

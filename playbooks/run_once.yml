@@ -1,0 +1,14 @@
+--- ## RUN ONCE EXAMPLE
+- hosts: apache
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: Run uptime command on all hosts and log it
+      raw: /bin/uptime >> /home/ansible/uptime.log
+    - name: List the /var directory and log it
+      raw: ls -al /var >> /home/ansible/dir.list
+      run_once: true
+
+  

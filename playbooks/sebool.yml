@@ -1,0 +1,10 @@
+---
+- hosts: local
+  user: ansible
+  sudo: yes
+  gather_facts: no
+  connection: ssh
+  tasks: 
+    - name: Change Boolean for anynymous writes on the web server
+      seboolean: name=httpd_anon_write state=yes persistent=no # changewill be remain same after reboot
+  

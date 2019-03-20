@@ -1,0 +1,13 @@
+---
+- hosts: apache
+  user: ansible
+  sudo: yes
+  gather_facts: no
+  connection: ssh
+  tasks: 
+  - name: install {{ pkg }}
+    yum: name={{ pkg }} state=latest
+  - name: add user
+    user: name={{ usr }} state=present
+  
+  

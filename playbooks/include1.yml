@@ -1,0 +1,14 @@
+---
+- hosts: apache
+  sudo: yes
+  user: ansible
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: Install the apache 
+      yum: name=httpd state=latest 
+    - name: verify httpd service
+      raw: systemctl status ftpd
+      ignore_errors: yes    
+    - name: install the vsftpd
+      yum: name=vsftpd state=latest

@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Always do x
+    block:
+      - debug: 
+          msg: 'I execute normaly'
+      - name: i force a failure
+        command: /bin/false
+      - debug: 
+          msg: 'i never execute :-('
+    always: 
+      - debug:
+          msg: "This is always executed, "
+   

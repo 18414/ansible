@@ -1,0 +1,10 @@
+---
+- hosts: 127.0.0.1
+  user: ansible
+  sudo: yes
+  connection: local
+  gather_facts: no
+  tasks: 
+    - name: install apache 
+      yum: name=httpd state=absent
+      

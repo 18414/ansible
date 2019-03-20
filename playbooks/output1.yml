@@ -1,0 +1,14 @@
+---
+- hosts: apache
+  tasks:
+    - name: create file
+      file: 
+        path: /tmp/newfile
+        state: touch
+      register: output
+    - debug: var=output
+    - name: edit file
+      lineinfile: 
+        path: /tmp/newfile
+        line: "{{output.owner}}"
+  

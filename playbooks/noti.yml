@@ -1,0 +1,21 @@
+---
+- hosts: apache
+  user: ansible
+  connection: ssh
+  gather_facts: no
+  sudo: yes
+  tasks: 
+  - name: Install apache
+    yum: name=httpd state=latest
+  - name: start apache
+    service: name=httpd state=started
+  - name: create index file
+    file: state=touch dest=/var/www/html/index.html
+  - name: edit index file
+    lineinfile: 
+      line: "I AM DevOps Engineer\tANSIBLE"
+      path: /var/www/html/index.html
+    notify: apache restarted
+  handlers: 
+  - name: apache restarted
+    service: name=httpd state=restarted

@@ -1,0 +1,13 @@
+---
+- hosts: apache
+  sudo: yes
+  connection: ssh
+  user: ansible
+  gather_facts: yes
+  vars: 
+    userName: ansible
+    userPassword: ganesha
+    connectionType: SFTP
+  tasks: 
+    - name: Install the configuration file customized for the system
+      template: src=/home/ansible/playbooks/files/test.conf.j2 dest=/home/ansible/test3.conf owner=ansible group=ansible mode=750

@@ -1,0 +1,12 @@
+---
+- hosts: apache
+  user: ansible
+  sudo: yes
+  gather_facts: no
+  connection: ssh
+  tasks:   
+    - name: Executing a reomte command - upitme
+      shell: /bin/uptime >> uptime.log
+      args: 
+        chdir: logs/
+        creates: uptime.log ## Run play when logs and uptime.log does exist  

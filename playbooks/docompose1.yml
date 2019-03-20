@@ -1,0 +1,26 @@
+---
+- hosts: docker
+  user: bhushan
+  sudo: yes
+  gather_facts: no
+  tasks:
+    - name: docker | start Build nginx container image
+      docker_image: 
+        docker_host: unix://var/run/docker.sock
+        path: ./docker/nginx/
+        name: nginx
+
+    - name: docker | Start nginx container 
+      docker_container: 
+        docker_host: unix://var/run/docker.sock 
+        name: nginx
+        image: nginx
+        ports: 
+          - '80:80'
+        links: 
+          - web
+  
+ 
+    
+
+

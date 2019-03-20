@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks: 
+    - set_fact: 
+        task_status: "OK"
+
+    - name: main | trigger deployment
+        include_tasks : deploy.yml
+        loop: "{{ clusters }}"
+        loop_control:
+          index_var: index
+   

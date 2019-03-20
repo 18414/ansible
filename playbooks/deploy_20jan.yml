@@ -1,0 +1,24 @@
+---
+- hosts: apache
+  become: yes
+  user: ansible
+  tasks: 
+  - name: install lynx package
+    yum: pkg=lynx state=latest
+  - name: install telnet package
+    yum: pkg=telnet state=latest
+  - name: Verifying telnet package install 
+    command: yum list installed | grep telnet
+    register: result
+  - debug: var=result
+
+- hosts: mysql
+  become: yes
+  user: ansible
+  tasks: 
+  - name: install lynx package
+    yum: name=lynx state=latest
+  - name: install telnet package
+    yum: name=telnet state=latest
+    
+    

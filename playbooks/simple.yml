@@ -1,0 +1,11 @@
+---
+- hosts: apache
+  become: yes
+  tasks: 
+  - name: Install lynx
+    yum:
+      name: lynx 
+      state: latest
+
+
+     

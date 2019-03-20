@@ -1,0 +1,10 @@
+---
+- hosts: local
+  become: true
+  user: ansible
+  gather_facts: no
+  tasks: 
+    - name: Check or python package
+      command: /home/ansible/testing/test.sh > t.log
+      args:
+        chdir: /home/ansible/testing

@@ -1,0 +1,19 @@
+---
+- hosts: apache
+  become: yes
+  handlers: 
+    - name: restart apache
+      service: name=httpd state=restarted
+      listen: "restart web"
+  tasks: 
+    - name: change configuration
+      replace: 
+        path: /etc/httpd/conf/httpd.conf
+        regexp: "^DocumentRoot.*$"
+        replace: 'DocumentRoot "/opt/www/html"'
+        backup: yes
+    - name: Enter the line
+      lineinfile: 
+        path: /opt/www/html/index.html
+        line: "REYU"
+      notify: "restart web"

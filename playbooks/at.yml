@@ -1,0 +1,10 @@
+--- # AT MOUDLE
+- hosts: apache
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: Example of a future command with the AT module
+      at: command="ls /etc/passwd > /home/ansible/paswd.log" count=1 units="minutes" # 10 minutes counts
+  

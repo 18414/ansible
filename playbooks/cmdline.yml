@@ -1,0 +1,10 @@
+--- # VARIABLE AT A command LINE PASSING EXAMPLE
+- hosts: '{{ host }}'
+  user: '{{ user }}'
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: Install software 
+      yum: pkg={{ pkg }} state=latest
+     

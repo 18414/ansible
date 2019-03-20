@@ -1,0 +1,11 @@
+---
+- hosts: local
+  become: yes
+  tasks:
+  - name: creare a user mahajan
+    user: 
+      name: mahajan
+      state: absent   
+      force: yes
+    register: result
+  - debug: msg=result

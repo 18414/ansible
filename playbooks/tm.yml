@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: edit file
+      block:
+        - lineinfile:
+            path: /tmp/abc
+            line: "helow world"
+      rescue:
+        - debug:
+            msg: "File does not exist"
+      always:
+        - debug:
+            msg: "File exists"
+      

@@ -1,0 +1,10 @@
+---
+- hosts: apache
+  become: yes
+  tasks:
+    - name: copy file from source to destination 
+      copy:
+        src: /home/ansible/playbooks/ignore.txt
+        dest: /home/ansible
+      ignore_errors: yes
+    

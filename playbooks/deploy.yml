@@ -1,0 +1,14 @@
+---
+- name: deploying
+  block:
+    - debug:
+        msg: "on {{ clusters[index] }} status:  {{ task_status }}"
+        forcing failure on server03
+        - command: /bin/false
+          when: clusters[index]  == 'server03'
+      rescue:
+        - debug:
+            msg: "error on {{ clusters[index] }} "
+        - set_fact:
+            task_status: "ERROR"
+  when: task_status == 'OK'

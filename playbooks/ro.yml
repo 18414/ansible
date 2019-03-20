@@ -1,0 +1,13 @@
+---
+- hosts: all
+  connection: ssh
+  sudo: yes
+  user: ansible
+  gather_facts: no
+  tasks: 
+    - name: check uptime
+      raw: uptime > /home/ansible/uptime.log
+      run_once: true
+    - name: check /var and log it
+      raw: ls /var > /home/ansible/dir.list
+  

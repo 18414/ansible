@@ -1,0 +1,17 @@
+---
+- hosts: apache
+  sudo: yes
+  user: ansible
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: add user
+      user: name={{ item }} state=present groups=admin append=yes
+      with_items: 
+        - raju
+        - bapu
+        - mohit
+      tags: useradd
+    - name: add group
+      group: name=admin state=present
+      tags: groupadd

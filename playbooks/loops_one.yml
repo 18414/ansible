@@ -1,0 +1,16 @@
+---
+- hosts: apache
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: Add a list of users
+      user: name={{ item }} state=present 
+      when: ansible_os_family == "RedHat"
+      with_items: 
+        - user1
+        - user2
+
+
+

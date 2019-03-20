@@ -1,0 +1,18 @@
+--- ## When playbook 
+- hosts: all
+  sudo: yes
+  connection: ssh
+  gather_facts: yes
+  vars: 
+    playbook_type: conditionalexample
+  vars_files: 
+    - /home/ansible/playbooks/conf/copyright.yml
+    - /home/ansible/playbooks/conf/webdefaults.yml
+  tasks: 
+    - name: Install Apache Appropriate to the Distribution type 
+      command: yum -y install httpd
+      when: ansible_os_family == "RedHat"
+    - name: Install Apache Appropriate to the Distribution type 
+      command: apt-get -y install apache2
+      when: ansible_os_family == "Debian"
+    

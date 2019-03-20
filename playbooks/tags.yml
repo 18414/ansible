@@ -1,0 +1,21 @@
+--- # tags exmaple
+- hosts: apache
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: Install telnet and lynx packages
+      yum: pkg={{ item }} state=latest
+      with_items:
+        - telnet
+        - lynx
+      tags: 
+        - packages
+    - name: Verify that telnet was instlled
+      raw: yum list installed | grep telnet > /home/ansible/pkg.log
+      tags: 
+        - verification
+         
+
+  

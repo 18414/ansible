@@ -1,0 +1,10 @@
+--- # Delegate to Function Demo
+- hosts: 127.0.0.1
+  sudo: yes
+  user: ansible  
+  connection: ssh
+  tasks: 
+  - name: install telnet client
+    yum: pkg=telnet state=latest
+    delegate_to: 127.0.0.1
+  

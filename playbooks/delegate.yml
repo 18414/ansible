@@ -1,0 +1,12 @@
+--- # Delegate to Function Demo
+- hosts: apache
+  sudo: yes
+  user: ansible  
+  connection: ssh
+  tasks: 
+  - name: Run a remote ping on the application server
+    command: ping -c 4 mysql > /home/ansible/mysqlping.log
+    delegate_to: ansible # run ping command from localhost to mysql
+  - name: install a package
+    yum: pkg=lynx state=latest
+  

@@ -1,0 +1,4 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.142.0.5 apache.us-east1-b.c.static-groove-225809.internal apache  # Added by Google
+169.254.169.254 metadata.google.internal  # Added by Google

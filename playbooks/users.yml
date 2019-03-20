@@ -1,0 +1,9 @@
+---
+- hosts: apache
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  user: ansible
+  tasks: 
+  - name: Add the user called tstapache to the apache web client
+    user: name=tstapache2 remove=yes

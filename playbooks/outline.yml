@@ -1,0 +1,11 @@
+- apache
+- ansible user
+- sudo rights
+
+- date/time stamp for when the playbook start 
+
+- start the web service
+
+- verify that the web service is running
+
+- 

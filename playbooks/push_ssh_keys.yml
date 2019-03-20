@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: false
+  vars: 
+    ssh_keys: '/root/.ssh/id_rsa.pub'
+  tasks: 
+    - name: copy ssh key
+      authorized_key: 
+        key: "{{ lookup('file', ssh_key) }}"
+        user: root
+
+  

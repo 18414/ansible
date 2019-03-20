@@ -1,0 +1,14 @@
+---
+- hosts: ubuntu
+  user: ansible
+  connection: ssh
+  sudo: yes
+  gather_facts: yes
+  tasks: 
+    - name: Install apache on ubuntu
+      apt: name=apache2 state=latest
+      when: ansible_os_family == "Debian"
+    - name: start apache service
+      service: name=apache2 state=started
+    - name: Disable apache2 alias module
+      apache2_module: state=absent name=alias   

@@ -1,0 +1,14 @@
+--- # local actiondemo
+- hosts: apache
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: yes
+  tasks: 
+  - name: Ping application server before we run our install 
+    local_action: command ping -c 4 apache
+    register: result
+  - debug: var=result
+  - name: Install Lynx on remote server
+    yum: pkg=lynx state=latest
+   

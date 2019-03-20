@@ -1,0 +1,11 @@
+--- # SELINUX MODULE EXAMPLE
+- hosts: local
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - name: Change SElinux cofiguration 
+      selinux: policy=targeted state=permissive 
+  
+ 

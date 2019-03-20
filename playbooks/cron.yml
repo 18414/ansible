@@ -1,0 +1,10 @@
+--- # CRON
+- hosts: ansible
+  user: ansible
+#  sudo: yes
+  gather_facts: no
+  tasks: 
+    - name: Add a cron Job to the ansible user
+      cron: name="list files" state=absent
+
+     

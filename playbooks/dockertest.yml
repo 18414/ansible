@@ -1,0 +1,10 @@
+---
+- hosts: docker-server
+  connection: ssh
+  sudo: yes
+  tasks:
+    - name: test docker server
+      ping: 
+      register: result
+    - debug: var=result
+  

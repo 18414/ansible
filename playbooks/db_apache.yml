@@ -1,0 +1,19 @@
+---
+- hosts: apache
+  become: yes
+  tasks:
+  - name: install apache
+    yum: name=httpd state=latest
+  - name: start http service
+    service: name=httpd state=started 
+    tags:
+     - web 
+
+- hosts: databases
+  become: yes
+  tasks: 
+  - name: install nginx
+    yum: name=nginx state=latest
+    tags:
+      - ng
+  

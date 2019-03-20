@@ -1,0 +1,10 @@
+---
+- hosts: docker
+  sudo: yes
+  user: bhushan
+  tasks: 
+    - name: create container
+      docker_container: 
+        name: shiva
+        image: centos:latest
+        

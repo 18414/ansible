@@ -1,0 +1,16 @@
+--- # The pause module
+- hosts: apache
+  sudo: yes
+  user: ansible
+  connection: ssh
+  gather_facts: no
+  tasks: 
+  - name: Install HTTPD
+    action: yum name=httpd state=installed
+  - name: Pausing
+    pause:
+      seconds: 3
+#      prompt: "Make sure the installation is complte...#"
+  - name: Verify lynx installation
+    action: yum name=lynx state=present
+

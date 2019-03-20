@@ -1,0 +1,14 @@
+---
+- hosts: apache
+  user: ansible
+  connection: ssh
+  sudo: yes
+  gather_facts: no
+  tasks:   
+  - name: Install web server
+    yum: name=httpd state=installed 
+  - debug:  msg="successfully installed"
+  - name: How long has the system been up?
+    shell: /bin/uptime  
+    register: result
+  - debug: var=result

@@ -1,0 +1,2 @@
+My IP address is 10.142.0.2
+CentOS is my OS version

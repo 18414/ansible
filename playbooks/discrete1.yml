@@ -1,0 +1,12 @@
+---
+- hosts: all  
+  connection: ssh
+  sudo: yes
+  user: ansible
+  gather_facts: no
+  tasks: 
+    - include: /home/ansible/playbooks/plays/packages.yml
+    - name: Verify the telnet package is intalled
+      raw: yum list installed | grep telnet > /home/ansible/pkg2.log
+  
+  

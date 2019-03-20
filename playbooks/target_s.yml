@@ -1,0 +1,6 @@
+---
+- hosts: apache
+  user: test
+  sudo: yes
+  connection: ssh
+  gather_facts: no

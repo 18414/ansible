@@ -1,0 +1,26 @@
+---
+- hosts: apache
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: no 
+  vars: 
+    playbook_version: 1.0
+  vars_files: 
+    - /home/ansible/playbooks/conf/copyright.yml
+    - /home/ansible/playbooks/conf/webdefaults.yml
+  vars_prompt: 
+    - name: web_domain
+      prompt: Web domain
+  tasks: 
+    - name: Install apache server
+      yum: name=httpd state=installed
+      notify: restart apache
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted 
+      
+      
+    
+      
+    

@@ -1,0 +1,11 @@
+---
+- hosts: apache
+  become: true
+  vars:
+    author_name: testuser
+  vars_files: 
+  - vars.yml
+  tasks: 
+  - name: Install Lynx on App server
+    yum: pkg=lynx state=installed update_cache=true
+

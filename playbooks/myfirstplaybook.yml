@@ -1,0 +1,24 @@
+--- # my first playbook
+- hosts: apache
+  sudo: yes
+  user: ansible
+  connection: ssh
+  gather_facts: no
+  vars:
+    playbook_version: 0.1b
+  vars_files: 
+    - /home/ansible/playbooks/conf/webdefaults.yml 
+    - /home/ansible/playbooks/conf/copyright.yml 
+  tasks: 
+  - name: Install apache webserver
+    yum: name=httpd state=latest
+  - name: Verify lynx is install
+    command: yum list installed | grep lynx > /home/ansible/lynx.log
+  - name: display the file
+    shell: cat /home/ansible/lynx.log
+    register: output
+  - debug: var=output
+   
+ 
+  
+  

@@ -1,0 +1,28 @@
+---
+- hosts: '{{ hostr }}'
+  user: ansible
+  sudo: yes
+  gather_facts: no
+  tasks:  
+  - name: date/time stamp for when the playbook start
+    raw: /bin/date > /home/ansible/dt.log
+  - name: install the apache web server
+    yum: pkg=httpd state=latest
+  - name: start the web server
+    service: name=httpd state=started
+  - name: verify that the web server is running
+    raw: systemctl status httpd 
+    register: result
+  - debug: var=result
+  - name: install client software
+    yum: name={{ item }} state=latest
+    with_items: 
+    - httpd
+    - telnet
+    tags: httpd 
+  - name: log all packages install on the system
+    raw: yum list installed > /home/ansible/allpkg.log
+  - name: date/time stamp for when the plabook ends
+    raw: /bin/date > /home/ansible/enddate.log
+
+

@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Install ftp and vsftpd
+      yum:
+        name: "{{item}}"
+        state: installed
+      with_items:  
+        - ftp
+        - vsftpd
+    - name: Editing ftp configuration file
+      lineinfile:
+        dest: /etc/vsftpd/vsftpd.conf
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - { regexp: '^#anonymous_enable=NO', line: 'anonymous_enable=NO'}
+        - { regexp: '^#ascii_upload_enable=Yes', line: 'ascii_upload_enable=Yes'}
+        - { regexp: '^#ascii_download_enable=YES', line: 'ascii_download_enable=YES' }
+        - { regexp: '^#ftpd_banner=Welcome to UNIXMEN FTP service', line: 'ftpd_banner=Welcome to UNIXMEN FTP service'}
+        - { regexp: '^#use_localtime=YES', line: 'use_localtime=YES'}
+      notify: 
+      - restart vsftpd
+  handlers:
+    - name: restart vsftpd
+      service:
+        name: vsftpd
+        state: started
+
+

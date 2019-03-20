@@ -1,0 +1,11 @@
+--- ## FULL INCLUDE TASKS EXAMPLE
+- hosts: apache
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  tasks: 
+    - include: /home/ansible/playbooks/plays/packages.yml
+    - name: Verify the telnet packag is installed 
+      raw: yum list installed | grep telnet > /home/ansible/pkgs.log
+

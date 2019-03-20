@@ -1,0 +1,12 @@
+---
+- hosts: apache
+  become: yes
+  tasks:
+    - name: copy a file
+      copy:
+        src: webs.yml
+        dest: /home/ansible/playbooks/
+        mode: 400
+      register: var
+    - name: output of debug info
+      debug: msg=var

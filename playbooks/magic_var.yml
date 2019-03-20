@@ -1,0 +1,12 @@
+---
+- name : Magic variable and ninja
+  hosts: localhost
+  vars:
+    inv_file: /home/ansible/inventory/inventory.txt
+  tasks:
+  - name: create a file
+    file: path="{{inv_file}}" state=touch
+  
+  - name: generate inventory
+    lineinfile: path="{{inv_file}}" line="{{ groups['webservers'] }}"
+ 

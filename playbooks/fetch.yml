@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: yes
+  connection: ssh
+  user: ansible
+  gather_facts: yes
+  tasks: 
+     - name: copy remote file to control server
+       fetch: src=/etc/fstab dest=/home/ansible/prefix-{{ ansible_hostname }} flat=yes
+   

@@ -1,0 +1,10 @@
+---
+- hosts: docker
+  user: bhushan
+  become: yes
+  tasks:
+    - name: take a backup of swarm dir
+      fetch:
+        src: /root/swarm/swarm.tar
+        dest: /tmp
+        remote_src: yes

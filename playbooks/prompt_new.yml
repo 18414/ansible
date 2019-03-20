@@ -1,0 +1,15 @@
+---
+- hosts: all
+  connection: ssh
+  user: ansible
+  sudo: yes
+  gather_facts: no
+  vars_prompt:
+    - name: usera
+      prompt: add new user
+      default: ganesha
+      private: no
+  tasks: 
+    - name: Adding user
+      user: name={{ usera }} state=present
+ 

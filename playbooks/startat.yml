@@ -1,0 +1,15 @@
+---
+- hosts: apache
+  sudo: yes
+  user: ansible
+  connection: ssh
+  gather_facts: no
+  tasks:
+  - name: Install apache server
+    yum: name=httpd state=latest
+  - name: start apache service
+    service: name=httpd state=started
+  - name: install telnet 
+    yum: name=telnet state=latest
+  - name: start telnet service
+    service: name=telnet state=started
