@@ -3,6 +3,7 @@
   hosts: localhost
   connection: local
   gather_facts: no
+  become: yes
   vars:
     service_account_email: 524495382084-compute@developer.gserviceaccount.com
     credentials_file: /home/centos/static-groove-225809-b8af1b5ce15e.json
