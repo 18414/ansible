@@ -11,7 +11,7 @@
       docker_container: 
         name: splunksh
         state: started
-        image: "bmahajan/splunksh:v2"
+        image: "bmahajan/splunksh:v3"
         pull: true
         detach: yes
         tty: yes
