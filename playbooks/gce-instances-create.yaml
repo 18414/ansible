@@ -10,6 +10,7 @@
     project_id: static-groove-225809
     machine_type: n1-standard-1
     image: centos-7
+    zone: us-east1-b
     
   tasks: 
     - name: Launch instances "{{ instances }}"
@@ -17,6 +18,7 @@
           instance_names: "{{ instances }}"
           machine_type: "{{ machine_type }}"
           image: "{{ image }}"
+          zone: "{{ zone}}"
           service_account_email: "{{ service_account_email }}"
           credentials_file: "{{ credentials_file }}"
           project_id: "{{ project_id }}"
