@@ -1,0 +1,17 @@
+---
+- hosts: docker
+  become: true
+  tasks:
+    - name: login into docke hub registry
+      docker_login:
+        email: "bmahajan0@gmail.com"
+        username: "bmahajan"
+        password: "ganesha@123"
+    - name: Ensure that container is running 
+      docker_container: 
+        name: apache
+        state: started
+        image: "bmahajan/splunksh:v2"
+        pull: true
+        ports: 
+          - "8000:8000"

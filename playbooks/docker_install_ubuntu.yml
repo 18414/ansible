@@ -1,0 +1,61 @@
+---
+  - hosts: docker-ubuntu
+    become: yes
+    become_method: sudo
+    tasks:
+      - name: "add docker repository"
+        apt_repository: repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable' state=present
+        when: ansible_distribution == "Ubuntu"
+ 
+      - name: "Ensure old versions of docker are purged 1"
+        apt: name=lxc-docker state=absent purge=yes
+        when: ansible_distribution == "Ubuntu"
+   
+      - name: "Ensure old version of docker are purged 2"
+        apt: name=docker state=absent purge=yes
+        when: ansible_distribution == "Ubuntu"
+  
+      - name: "Ensure old versions of docker are purged 3"
+        apt: name=docker-engine state=absent purge=yes
+        when: ansible_distribution == "Ubuntu"
+ 
+      - name: "Ensure old versions of docker are purged 4"
+        apt: name=docker.io state=absent purge=yes
+        when: ansible_distribution == "Ubuntu"   
+      - name: "get kernel version"
+        shell: uname -r 
+        register: kernel
+
+      - name: "install 14.04 pre-req 1"
+        apt: 
+          name: linux-image-extra-{{ kernel.stdout }}
+          state: present
+          update_cache: yes
+          install_recommends: yes
+        when: ansible_distribution == "Ubuntu"
+        retries: 3
+        delay: 20 
+
+      - name: "install 14.04 pre-req 2"
+        apt: name=linux-image-extra-virtual state=present update_cache=yes install_recommends=yes
+        when: ansible_distribution == "Ubuntu"
+        retries: 3
+        delay: 20
+      - name: "install docker"
+        apt: name=docker-ce=17.06.2* state=present update_cache=yes install_recommends=yes allow_unauthenticated=yes
+        when: ansible_distribution == "Ubuntu"
+        retries: 3
+        delay: 20
+      - name: "add docker group"
+        group: name=docker state=present
+  
+      - name: "add ubuntu to docker group"
+        user: name=ubuntu groups=docker append=yes
+  
+      - name: "Restart Docker service"
+        service: name=docker state=started
+  
+      - name: "get docker info"
+        shell: docker info
+        register: docker_info
+        changed_when: False                
