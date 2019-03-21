@@ -1,4 +1,4 @@
-- name: Create instances "{{ instances }}"
+- name: Provisioning Google Cloud instances "{{ instances }}"
   hosts: localhost
   connection: local
   gather_facts: yes
@@ -68,7 +68,7 @@
         state: stopped
       tags: shut
 
-    - name: Star instances
+    - name: Start instances
       gce:
         instance_names: "{{ instances }}"
         machine_type: "{{ machine_type }}"
