@@ -1,0 +1,12 @@
+---
+  - name: make entry into inventory
+    lineinfile:
+      path: /home/ansible/inventory.ini
+      line: "{{ instances }}"
+    tags: inv
+
+  - name: copy a script on "{{ instances }}"
+    copy:
+      src: /home/ansible/ansible/playbooks/ansible_env_1_2.sh
+      dest: /home/root/
+    tags: cop
