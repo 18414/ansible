@@ -22,16 +22,3 @@
           - "8081:80"
           - "8082:3306"
 
-    - name: launch container2
-      docker_container: 
-        name: xampplb2
-        state: started
-        image: "bmahajan/gym_management_system:v1"
-        pull: true
-        detach: yes
-        tty: yes
-        volumes: 
-          - "/gym_mgmt_system:/gym_mgmt_data"
-        ports: 
-          - "8083:80"
-          - "8084:3306"
