@@ -31,3 +31,9 @@
         ports: 
           - "8083:80"
           - "8084:3306"
+    - name: starting the all services of containers manually 
+      command: docker exec "{{ item }}" /opt/lampp/lampp start
+      loop:
+        - xampplb1
+        - xampplb2
+   
