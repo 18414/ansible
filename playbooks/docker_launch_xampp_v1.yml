@@ -1,0 +1,33 @@
+---
+- hosts: "{{ instance }}"
+  become: true
+  tasks:
+    - name: login into docke hub registry
+      docker_login:
+        email: "bmahajan0@gmail.com"
+        username: "bmahajan"
+        password: "{{ paswd }}"
+
+    - name: launch container1
+      docker_container: 
+        name: xampplb1
+        state: started
+        image: "bmahajan/gym_management_system:v1"
+        pull: true
+        detach: yes
+        tty: yes
+        ports: 
+          - "8081:80"
+          - "8082:3306"
+
+    - name: launch container2
+      docker_container: 
+        name: xampplb2
+        state: started
+        image: "bmahajan/gym_management_system:v1"
+        pull: true
+        detach: yes
+        tty: yes
+        ports: 
+          - "8083:80"
+          - "8084:3306"
