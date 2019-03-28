@@ -1,0 +1,16 @@
+---
+- hosts: "{{ instance1 }}"
+  become: true
+  tasks:
+    - name: Stop container on docker1 server
+      docker_container: 
+        name: xampplb1
+        state: stopped
+      
+- hosts: "{{ instance2 }}"
+  become: true
+  tasks:
+    - name: Stop container on docker2 server
+      docker_container: 
+        name: xampplb2
+        state: stopped
