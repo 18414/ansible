@@ -1,16 +1,23 @@
 ---
-- hosts: "{{ instance1 }}"
+- hosts: "{{ instance }}"
   become: true
   tasks:
-    - name: Stop container on docker1 server
+    - name: start container on docker1/2 server
       docker_container: 
         name: xampplb1
-        state: stopped
-      
-- hosts: "{{ instance2 }}"
-  become: true
-  tasks:
-    - name: Stop container on docker2 server
-      docker_container: 
+        image: bmahajan/gym_management_system:v2
+        state: started
         name: xampplb2
+        image: bmahajan/gym_management_system:v2
+        state: started
+      tags: start
+      
+    - name: Stop container on docker1/2 server
+      docker_container: 
+        name: xampplb1
+        image: bmahajan/gym_management_system:v2
         state: stopped
+        name: xampplb2
+        image: bmahajan/gym_management_system:v2
+        state: stopped
+      tags: stop
