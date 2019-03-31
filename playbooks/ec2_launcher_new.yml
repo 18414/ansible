@@ -12,29 +12,29 @@
           instance_type: t2.micro
           key_name: aws_final
           image: ami-01eb7a7f8688ed90b
-          user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"      
+          user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"
           region: us-east-2
           group: Newsc
           vpc_subnet_id: subnet-052af449
-          assign_public_ip: yes       
+          assign_public_ip: yes
           wait: yes
           count: 1
-        #  instance_tags: 
+          #instance_tags:
          #   name: Docker1
         register: ec2
 
       - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
-        local_action: lineinfile 
-                      dest="./hosts" 
-                      regexp={{ item.public_ip }} 
+        local_action: lineinfile
+                      dest="./hosts"
+                      regexp={{ item.public_ip }}
                       insertafter="[doc]" line={{ item.public_ip }}
         with_items: "{{ ec2.instances }}"
 
 
       - name: Wait for SSH to come up
-        local_action: wait_for 
-                      host={{ item.public_ip }} 
-                      port=22 
+        local_action: wait_for
+                      host={{ item.public_ip }}
+                      port=22
                       state=started
         with_items: "{{ ec2.instances }}"
 
@@ -43,8 +43,9 @@
         with_items: "{{ ec2.instances }}"
         args:
           tags:
-            Name: Docker1
+            Name: Docker
 
-       
-        
-      
+      - name: make known host entry
+        shell: ssh-keyscan {{ item.public_ip }} >> /home/ansible/.ssh/known_hosts
+        with_items: "{{ ec2.instances }}"
+
