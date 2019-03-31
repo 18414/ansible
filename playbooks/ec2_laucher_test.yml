@@ -1,0 +1,25 @@
+---
+- name: ec2 launcher
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: launching ec2
+      ec2: 
+        instance_type: t2.micro
+        key_name: aws_final
+        image: ami-02bcbb802e03574ba  
+        region: us-east-2
+        group: Newsc
+        vpc_subnet_id: subnet-052af449
+        wait: yes
+        count: 2
+        user_data: |
+                  #!/bin/bash
+                  useradd ansible
+                  mkdir -p /home/ansible/.ssh
+                  echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC92Ihz4c0UgL78rV83XyFByuY3PP0bXxl70DFBNoUL/kPjLjGgYnfAmQRovIHaLJMUybQj4DoUHk2VtHGRFRx3K78Zo1G1/kiSDqvDWFvYr8gi3tDkXG1mBhuh7owFEHRSsuzITGtyUXp9aEZlM24N7KJ5zJzTYgIbQstVuRWddzzElom9UGwXQXZXMfThnocMCWfj6KJoLgYfzLg6M6gSE5VtrvJa6d7n1CyGryoc9Gz92TPOMXT+qrrKqsr0Pfvp5xmMCUa2efEVYDfot/UDA4hRL8hHHDdNXfmHfZpi0oW7Ew7sLf14d7TVpjpmKy0bNZIgYToSDy04Qxhh/uV7 ansible@ansible.example.com" > /home/ansible/.ssh/authorized_keys
+                  chmod 600 /home/ansible/.ssh/authorized_keys
+                  chmod 700 /home/ansible/.ssh
+                  chown -R ansible.ansible /home/ansible/.ssh/authorized_keys 
+                  chown -R ansible.ansible /home/ansible/.ssh/
+        

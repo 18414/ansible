@@ -1,0 +1,34 @@
+---
+- name: ec2 launcher
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: launching ec2
+      ec2: 
+        instance_type: t2.micro
+        key_name: aws_final
+        image: ami-01eb7a7f8688ed90b
+        user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}" 
+        region: us-east-2
+        group: Newsc
+        vpc_subnet_id: subnet-052af449
+        assign_public_ip: yes
+        wait: yes
+        count: 1
+        instance_tags:
+          app: Docker1
+    - name: Create SSH Group to login dynamically to EC2 Instance
+      add_host: 
+        hostname: "{{ item.public_ip }}"
+        groupname: ec2_server
+        with_items: ec2.instances
+    - name: Wait for SSH to come up
+      wait_for: 
+        host: "{{ item.public_ip }}" 
+        port: 22 
+        state: started
+      with_items: ec2.instances
+        
+
+
+       
