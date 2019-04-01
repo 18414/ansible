@@ -6,4 +6,7 @@
  chmod 600 /home/ansible/.ssh/authorized_keys
  chown -R ansible.ansible /home/ansible/.ssh/authorized_keys
  chown -R ansible.ansible /home/ansible/.ssh/
+ sed -i "/^root/a \\ansible ALL=(ALL) NOPASSWD: ALL" /etc/sudoers > /dev/null
+
+
 
