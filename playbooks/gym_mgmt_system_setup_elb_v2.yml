@@ -64,19 +64,16 @@
             - Newsc
           subnets:
             - subnet-052af449
-          listeners:
+            - subnet-817c44e9
+          scheme: internal
+          listeners: 
             - Protocol: HTTP
               Port: 80
               DefaultActions:
                 - Type: forward # Required. Only 'forward' is accepted at this time
                   TargetGroupName: apache # Required. The name of the target group
           region: us-east-2
-          zones: 
-            - us-east-2a
-            - us-east-2b
-            - us-east-2c       
           state: present
-        register: celb
  
       - name: Attach instances to ELB
         ec2_elb: 

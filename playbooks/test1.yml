@@ -1,0 +1,29 @@
+---
+  - name: Provision an EC2 Instance
+    hosts: local
+    connection: local
+    gather_facts: False
+    tags: provisioning
+    vars:
+      region: us-east-2
+    tasks:
+      - name: Launch the new EC2 Instance
+        ec2:
+          instance_type: t2.micro
+          key_name: aws_final
+          image: ami-01eb7a7f8688ed90b
+          user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"
+          region: us-east-2
+          group: Newsc
+          vpc_subnet_id: subnet-052af449
+          assign_public_ip: yes
+          wait: yes
+          instance_tags:
+            name: docker-server-{{item}}
+            environment: dev
+          with_sequence: end=0 start=10
+            count: 2
+          exact_count: 8
+          count_tag: 
+            name: docker*
+
