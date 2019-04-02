@@ -1,0 +1,2 @@
+sudo /root/.local/bin/aws elb describe-load-balancers --load-balancer-name gymelb
+ sudo /root/.local/bin/aws elb register-instances-with-load-balancer --load-balancer-name gymelb  --instances i-07a5cbf68f94a65b4

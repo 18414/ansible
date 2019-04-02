@@ -5,7 +5,6 @@ sed -i '/^[0-9]/d' hosts
 sleep 1
 
 #Launching EC2 instances  
-#ansible-playbook gym_mgmt_system_setup_v1.yml
 ansible-playbook gym_mgmt_system_setup_elb_v2.yml
 sleep 1
 

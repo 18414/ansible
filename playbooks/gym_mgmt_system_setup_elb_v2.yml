@@ -1,6 +1,6 @@
 ---
   - name: Provision an EC2 Instance
-    hosts: local
+    hosts: localhost
     connection: local
     gather_facts: False
     tags: provisioning
@@ -48,6 +48,11 @@
         shell: ssh-keyscan {{ item.public_ip }} >> /home/ansible/.ssh/known_hosts
         with_items: "{{ ec2.instances }}"
     
+  - name: Provision ELB
+    hosts: localhost
+    connection: local
+    gather_facts: False
+    tasks:
       - name: Create target group 
         elb_target_group:
           name: apache
@@ -65,7 +70,7 @@
           subnets:
             - subnet-052af449
             - subnet-817c44e9
-          scheme: internal
+          scheme: internet-facing
           listeners: 
             - Protocol: HTTP
               Port: 80
@@ -74,11 +79,14 @@
                   TargetGroupName: apache # Required. The name of the target group
           region: us-east-2
           state: present
+        register: gymelb
  
       - name: Attach instances to ELB
-        ec2_elb: 
-          state: present
-          ec2_elbs: gymelb
+        ec2_elb:
           region: us-east-2
-          instance_id: "{{ item.id }}"
-        with_items: "{{ ec2.tagged_instances }}"
+          instance_id: "{{ item.id }}" 
+          ec2_elbs: gymelb
+          state: present
+          wait: yes
+        with_items: "{{ ec2.instances }}"
+        ignore_errors: yes
