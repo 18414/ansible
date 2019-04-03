@@ -10,4 +10,10 @@
         instance_type: db.t2.micro 
         username: bhushan
         password: ganesha123
+        security_groups: Newsc
+        db_name: gym_management_system
+        port: 3306
+        publicly_accessible: yes
+        wait: yes
+        wait_timeout: 300
         
