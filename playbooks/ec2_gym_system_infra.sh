@@ -1,4 +1,5 @@
 #!/bin/bash
+# Version: 1.0
 
 #Deleting previous ip addresses of instances from ANSIBLE inventory
 sed -i '/^[0-9]/d' hosts
