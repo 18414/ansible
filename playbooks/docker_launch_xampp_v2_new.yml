@@ -18,7 +18,7 @@
         tty: yes
         ports: 
           - "80:80"
-          - "8082:3306"
+          - "3306:3306"
     - name: starting the all services of containers manually
       command: docker exec xampplb1 /opt/lampp/lampp start
       ignore_errors: yes
@@ -36,7 +36,7 @@
         tty: yes
         ports: 
           - "80:80"
-          - "8084:3306"
+          - "3306:3306"
     - name: starting the all services of containers manually 
       command: docker exec xampplb2 /opt/lampp/lampp start
       ignore_errors: yes
