@@ -1,0 +1,13 @@
+- name: Provisioning RDS MySql DB
+  hosts: localhost
+  become: true
+  tasks: 
+    - rds: 
+        command: create
+        instance_name: gym_system
+        db_engine: MySQL
+        size: 10
+        instance_type: db.t2.micro 
+        username: bhushan
+        password: ganesha123
+        

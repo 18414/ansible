@@ -18,7 +18,8 @@ sleep 1
 
 #Launching containers 
 
-# sed 's/127.0.0.1/gym-system-db.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /oplampp/htdocs/gym_management_system/includes/db_connect.php
-
 ansible-playbook docker_launch_xampp_v2_new.yml --extra-vars "instance1=`cat ip_list| head -1` instance2=`cat ip_list| tail -1` paswd=ganesha@123"
 
+
+
+# sed 's/127.0.0.1/gym-system-db.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /oplampp/htdocs/gym_management_system/includes/db_connect.php
