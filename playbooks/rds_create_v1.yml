@@ -1,12 +1,13 @@
-- name: Provisioning RDS MySql DB
+- name: Configure RDS 
   hosts: localhost
   become: true
   tasks: 
-    - rds: 
+  gather_facts: false
+    - name: Provision RDS 
+      rds: 
         command: create
-        instance_name: gym_system
         db_engine: MySQL
-        size: 10
+        allocated_storage: 10
         instance_type: db.t2.micro 
         username: bhushan
         password: ganesha123
@@ -16,4 +17,10 @@
         publicly_accessible: yes
         wait: yes
         wait_timeout: 300
-        
+        instance_name: gymdb
+      register: gymdb
+
+    - name: Add new instance to host group
+      add_host: hostname={{ item.endpoint }} groupname=database     
+      with_items: "{{ gymdb.instance }}"
+

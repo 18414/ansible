@@ -16,8 +16,13 @@ grep [0-9] hosts > ip_list
 
 sleep 1
 
-#Launching containers 
+#Launching RDS 
 
+
+#inserting tables
+sudo mysql -h $hm -u bhushan -p ganesha123 < gym_management_system.sql
+
+#Launching containers 
 ansible-playbook docker_launch_xampp_v2_new.yml --extra-vars "instance1=`cat ip_list| head -1` instance2=`cat ip_list| tail -1` paswd=ganesha@123"
 
 
