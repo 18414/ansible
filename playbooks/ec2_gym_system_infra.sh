@@ -16,8 +16,6 @@ grep [0-9] hosts > ip_list
 
 sleep 1
 
-#Launching RDS 
-
 
 
 #inserting tables
@@ -28,5 +26,3 @@ ansible-playbook docker_launch_xampp_v2_new.yml --extra-vars "instance1=`cat ip_
 
 
 
-hm=`cat rds-hostname.txt`
-sed "s/127.0.0.1/${hm}/g; s/root/bhushan/g; s/""/"ganesha123"/g"  /oplampp/htdocs/gym_management_system/includes/db_connect.php

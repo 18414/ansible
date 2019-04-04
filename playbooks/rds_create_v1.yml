@@ -2,7 +2,6 @@
   hosts: localhost
   become: true
   tasks: 
-  gather_facts: false
     - name: Provision RDS 
       rds: 
         command: create
@@ -21,7 +20,7 @@
       register: gymdb
 
     - name: Add new instance to host group
-      shell: echo "{{ item.endpoint }}" >> rds-hostname.txt 
+      #command: echo "{{ item.endpoint }}" > rds-hostname.txt
       add_host: hostname={{ item.endpoint }} groups=database     
       with_items: "{{ gymdb.instance }}"
       
