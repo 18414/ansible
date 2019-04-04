@@ -21,6 +21,8 @@
       register: gymdb
 
     - name: Add new instance to host group
-      add_host: hostname={{ item.endpoint }} groupname=database     
+      shell: echo "{{ item.endpoint }}" >> rds-hostname.txt 
+      add_host: hostname={{ item.endpoint }} groups=database     
       with_items: "{{ gymdb.instance }}"
+      
 
