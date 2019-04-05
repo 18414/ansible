@@ -1,0 +1,58 @@
+---
+- hosts: "{{ instance1 }}"
+  become: true
+  tasks:
+    - name: login into docke hub registry
+      docker_login:
+        email: "bmahajan0@gmail.com"
+        username: "bmahajan"
+        password: "{{ paswd }}"
+
+    - name: launch container1 on docker1 server
+      docker_container: 
+        name: xampplb1
+        state: started
+        image: "bmahajan/gym_management_system:v2"
+        pull: true
+        detach: yes
+        tty: yes
+        ports: 
+          - "80:80"
+          - "3306:3306"
+    - name: Get db hostnme 
+      shell: /root/.local/bin/aws  rds describe-db-instances --db-instance-identifier gymsystemdb | grep "Address" | cut -d ":" -f2  | ""tr -d '"' | tr -d ","
+      register: db_name
+      delegate_to: 127.0.0.1
+
+    - name: Integrate RDS with PHP
+      shell: docker exec xampplb1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
+
+    - name: starting the all services of containers manually
+      command: docker exec xampplb1 /opt/lampp/lampp start
+      ignore_errors: yes
+      
+- hosts: "{{ instance2 }}"
+  become: true
+  tasks:
+    - name: launch container2 on docker2 server
+      docker_container: 
+        name: xampplb2
+        state: started
+        image: "bmahajan/gym_management_system:v2"
+        pull: true
+        detach: yes
+        tty: yes
+        ports: 
+          - "80:80"
+          - "3306:3306"
+    - name: Get db hostnme
+      shell:  /root/.local/bin/aws  rds describe-db-instances --db-instance-identifier gymsystemdb | grep "Address" | cut -d ":" -f2  | ""tr -d '"' | tr -d ","
+      register: db_name
+      delegate_to: 127.0.0.1
+
+    - name: Integrate RDS with PHP
+      shell: docker exec xampplb2  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php
+    - name: starting the all services of containers manually 
+      command: docker exec xampplb2 /opt/lampp/lampp start
+      ignore_errors: yes
+     

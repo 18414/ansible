@@ -17,12 +17,14 @@ grep [0-9] hosts > ip_list
 sleep 1
 
 
+db_hostname=`sudo /root/.local/bin/aws  rds describe-db-instances --db-instance-identifier gymsystemdb | grep "Address" | cut -d ":" -f2  | ""tr -d '"' | tr -d ","`
 
 #inserting tables
-sudo mysql -h `cat rds-hostname.txt` -u bhushan -p ganesha123 < gym_management_system.sql
+#sudo mysql -h $db_hostname -u bhushan -p ganesha123 < gym_management_system.sql
 
 #Launching containers 
-ansible-playbook docker_launch_xampp_v2_new.yml --extra-vars "instance1=`cat ip_list| head -1` instance2=`cat ip_list| tail -1` paswd=ganesha@123"
+ansible-playbook docker_launch_xampp_v3_new.yml --extra-vars "instance1=`cat ip_list| head -1` instance2=`cat ip_list| tail -1` paswd=ganesha@123 db_host=$db_hostname"
+
 
 
 
