@@ -26,8 +26,9 @@
 
     - name: Integrate RDS with PHP
       shell: docker exec xampplb1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
+
     - name: Name to home page
-      shell: docker exec xampplb2 sed '4i\<li>Docker1</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
+      shell: docker exec xampplb1 sed '4i\<li>Docker1</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
 
     - name: starting the all services of containers manually
       command: docker exec xampplb1 /opt/lampp/lampp start

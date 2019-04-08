@@ -3,6 +3,7 @@
     hosts: localhost
     connection: local
     gather_facts: False
+    become: true
     tags: provisioning
     vars:
       region: us-east-2
@@ -47,6 +48,10 @@
       - name: make known host entry
         shell: ssh-keyscan {{ item.public_ip }} >> /home/ansible/.ssh/known_hosts
         with_items: "{{ ec2.instances }}"
+  
+      - name: list the running instances
+        shell: /root/.local/bin/aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running | tr -d "], [, " | tr -d '"' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'  | sed -e '/^ *$/d'
+        register: list_instances
 
   - name: Provision Classic ELB
     hosts: localhost
@@ -76,5 +81,5 @@
               load_balancer_port: 80
               instance_port: 80
           instance_ids: "{{ item }}"
-        with_items: "{{ ec2.id }}"
+        with_items: "{{ list_instances }}"
          
