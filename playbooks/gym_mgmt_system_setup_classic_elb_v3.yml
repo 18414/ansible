@@ -51,7 +51,7 @@
   
       - name: list the running instances
         shell: /root/.local/bin/aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running | tr -d "], [, " | tr -d '"' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'  | sed -e '/^ *$/d'
-        register: list_instances
+        register: hostlist
 
   - name: Provision Classic ELB
     hosts: localhost
@@ -81,5 +81,5 @@
               load_balancer_port: 80
               instance_port: 80
           instance_ids: "{{ item }}"
-        with_items: "{{ list_instances }}"
+        with_items: "{{ hostlist.instances }}"
          
