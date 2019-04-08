@@ -12,7 +12,7 @@
       docker_container: 
         name: xampplb1
         state: started
-        image: "bmahajan/gym_management_system:v2"
+        image: "bmahajan/gym_management_system:v3"
         pull: true
         detach: yes
         tty: yes
@@ -38,7 +38,7 @@
       docker_container: 
         name: xampplb2
         state: started
-        image: "bmahajan/gym_management_system:v2"
+        image: "bmahajan/gym_management_system:v3"
         pull: true
         detach: yes
         tty: yes
