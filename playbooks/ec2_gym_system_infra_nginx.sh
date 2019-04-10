@@ -27,7 +27,7 @@ sleep 1
 #sudo mysql -h $db_hostname -u bhushan -p ganesha123 < gym_management_system.sql
 
 #Launching containers 
-ansible-playbook docker_launch_xampp_v3_new.yml --extra-vars "instance1=`cat ip_list| head -1` instance2=`cat ip_list| tail -1` paswd=ganesha@123 db_host=$db_hostname"
+ansible-playbook docker_launch_nginx_lb_v1.yml -extra-vars  "hip=$host_ipt paswd=ganesha@123"
 
 
 

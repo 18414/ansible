@@ -1,0 +1,69 @@
+---
+- hosts: "{{ instance1 }}"
+  become: true
+  tasks:
+    - name: login into docke hub registry
+      docker_login:
+        email: "bmahajan0@gmail.com"
+        username: "bmahajan"
+        password: "{{ paswd }}"
+
+    - name: launch container App1 
+      docker_container: 
+        name: app1
+        state: started
+        image: "bmahajan/lb:app1"
+        pull: true
+        detach: yes
+        tty: yes
+        ports: 
+          - "8081:80"
+    - name: Integrate RDS with PHP
+      shell: docker exec app1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
+
+    - name: Name to home page
+      shell: docker exec app1 sed -i '5i\<li>App1</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
+
+
+
+  - name: launch container App2 
+      docker_container:
+        name: app2
+        state: started
+        image: "bmahajan/lb:app2"
+        pull: true
+        detach: yes
+        tty: yes
+        ports:
+          - "8081:80"
+    - name: Integrate RDS with PHP
+      shell: docker exec app1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php
+
+    - name: Name to home page
+      shell: docker exec app1 sed -i '5i\<li>App2</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
+
+
+    - name: starting the all services of containers manually
+      command: docker exec "{{ item }}" /opt/lampp/lampp start
+      with_items: 
+        - app1
+        - app2
+      ignore_errors: yes
+   
+    - name: Append IP address of host to nginx config file
+      shell: /root/.local/bin/aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running | tr -d "], [, " | tr -d '"' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'  | sed -e '/^ *$/d'
+      register: nginx_host
+
+
+    - name: Fetch IP address from hosts file 
+      shell: grep [0-9] hosts
+      register: host_ip
+     
+    - name: Configure Nginx
+      shell: docker exec app1 sed -i '5i\<li>App2</li>\ ' /etc/nginx/nginx.conf 
+      with_items: "{{ host_ip }}"
+
+      
+    - name: starting nginx service 
+      command: docker exec nginx  /etc/init.d/nginx restart
+      ignore_errors: yes
