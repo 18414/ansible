@@ -6,6 +6,7 @@
       shell: /root/.local/bin/aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running | tr -d "], [, " | tr -d '"' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'  | sed -e '/^ *$/d'
       register: hostlist
 
-    - debug: {{ item }}
-      with_items: "{{ hostlist }}"
+    - debug: 
+        msg: "{{ item }}"
+      with_items: "{{ hostlist.stdout }}"
 

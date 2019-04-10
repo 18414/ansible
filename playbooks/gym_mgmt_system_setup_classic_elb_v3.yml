@@ -82,5 +82,10 @@
               load_balancer_port: 80
               instance_port: 80
           instance_ids: "{{ item.id }}"
-        with_items: "{{ ec2.instances }}"
-         
+          with_items: "{{ ec2.instances }}"
+
+      - debug: 
+          msg: "{{ item.id }}"
+        with_items: "{{ ec2.stdout }}"
+  
+ 
