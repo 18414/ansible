@@ -65,6 +65,7 @@
           region: us-east-2
           state: present
           purge_instance_ids: true
+          security_group_ids: sg-0b012b248717c11b1
           health_check:
             ping_protocol: tcp
             ping_port: 80
@@ -80,6 +81,6 @@
             - protocol: http
               load_balancer_port: 80
               instance_port: 80
-          instance_ids: "{{ item }}"
-        with_items: "{{ hostlist.stdout }}"
+          instance_ids: "{{ item.id }}"
+        with_items: "{{ ec2.instances }}"
          
