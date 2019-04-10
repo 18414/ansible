@@ -21,14 +21,10 @@ host_ip=`grep [0-9] hosts > ip_list`
 sleep 1
 
 
-#db_hostname=`sudo /root/.local/bin/aws  rds describe-db-instances --db-instance-identifier gymsystemdb | grep "Address" | cut -d ":" -f2  | ""tr -d '"' | tr -d ","`
 
-#inserting tables
-#sudo mysql -h $db_hostname -u bhushan -p ganesha123 < gym_management_system.sql
 
 #Launching containers 
-ansible-playbook docker_launch_nginx_lb_v1.yml -extra-vars  "hip=$host_ipt paswd=ganesha@123"
-
+ansible-playbook docker_launch_nginx_lb_v1.yml -extra-vars  "hip=$host_ip paswd=ganesha@123"
 
 
 

@@ -26,7 +26,7 @@
 
 
 
-  - name: launch container App2 
+    - name: launch container App2 
       docker_container:
         name: app2
         state: started
@@ -35,7 +35,7 @@
         detach: yes
         tty: yes
         ports:
-          - "8081:80"
+          - "8082:80"
     - name: Integrate RDS with PHP
       shell: docker exec app1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php
 
@@ -50,26 +50,31 @@
         - app2
       ignore_errors: yes
    
-    - name: Append IP address of host to nginx config file
-      shell: /root/.local/bin/aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running | tr -d "], [, " | tr -d '"' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'  | sed -e '/^ *$/d'
-      register: nginx_host
+    - name: launch container nginx  
+      docker_container:
+        name: nginx
+        state: started
+        image: "bmahajan/lb:nginx"
+        pull: true
+        detach: yes
+        tty: yes
+        ports:
+          - "80:80"
 
-
-    - name: Fetch IP address from hosts file 
-      shell: grep [0-9] hosts
-      register: host_ip
+    #- name: Fetch IP address from hosts file 
+     # shell: grep [0-9] hosts
+      #register: host_ip
      
-    - name: check existing IP 
+    - name: check existing IP in nginx conf file
       shell: docker exec nginx grep [0-9] /etc/nginx/nginx.conf | head -2 | tail -1 | awk -F ":" '{print $1}'| awk -F " " '{print $2}'
       register: ext_ip
 
     - name: Configure Nginx
-      shell: docker exec nginx sed  -e "s/${ext_ip}\b/${host_ip}/g" /etc/nginx/nginx.conf
-      with_items: "{{ host_ip }}"
+      shell: docker exec nginx sed  -e "s/${item}\b/${hip}/g" /etc/nginx/nginx.conf
+      with_items: "{{ ext_ip }}"
 
       
     - name: starting nginx service 
       command: docker exec nginx  /etc/init.d/nginx restart
       ignore_errors: yes
 
-    docker exec nginx grep [0-9] /etc/nginx/nginx.conf | head -2 | tail -1 | awk -F ":" '{print $1}'| awk -F " " '{print $2}'
