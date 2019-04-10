@@ -59,11 +59,17 @@
       shell: grep [0-9] hosts
       register: host_ip
      
+    - name: check existing IP 
+      shell: docker exec nginx grep [0-9] /etc/nginx/nginx.conf | head -2 | tail -1 | awk -F ":" '{print $1}'| awk -F " " '{print $2}'
+      register: ext_ip
+
     - name: Configure Nginx
-      shell: docker exec app1 sed -i '5i\<li>App2</li>\ ' /etc/nginx/nginx.conf 
+      shell: docker exec nginx sed  -e "s/${ext_ip}\b/${host_ip}/g" /etc/nginx/nginx.conf
       with_items: "{{ host_ip }}"
 
       
     - name: starting nginx service 
       command: docker exec nginx  /etc/init.d/nginx restart
       ignore_errors: yes
+
+    docker exec nginx grep [0-9] /etc/nginx/nginx.conf | head -2 | tail -1 | awk -F ":" '{print $1}'| awk -F " " '{print $2}'
