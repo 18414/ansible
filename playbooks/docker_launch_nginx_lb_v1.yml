@@ -2,7 +2,7 @@
 - hosts: doc
   become: true
   vars: 
-    hip: "{{ hip_inside }}"
+    hip: "{{ hipinside }}"
   tasks:
     - name: login into docke hub registry
       docker_login:
