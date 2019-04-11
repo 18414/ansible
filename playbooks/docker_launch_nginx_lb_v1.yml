@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ instance1 }}"
+- hosts: doc
   become: true
   tasks:
     - name: login into docke hub registry
@@ -61,9 +61,6 @@
         ports:
           - "80:80"
 
-    #- name: Fetch IP address from hosts file 
-     # shell: grep [0-9] hosts
-      #register: host_ip
      
     - name: check existing IP in nginx conf file
       shell: docker exec nginx grep [0-9] /etc/nginx/nginx.conf | head -2 | tail -1 | awk -F ":" '{print $1}'| awk -F " " '{print $2}'
