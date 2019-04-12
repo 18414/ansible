@@ -1,1 +1,3 @@
+ mysql -h gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com -P 3306 -u bhushan -p gym_management_system < Gym_Management_System/gym_management_system.sql
+
  mysql -h gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com -P 3306 -u bhushan -p
