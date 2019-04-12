@@ -22,7 +22,7 @@
         ports: 
           - "8081:80"
     - name: Integrate RDS with PHP
-      shell: docker exec app1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
+      shell: docker exec app1  sed -i 's/127.0.0.1/gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
 
     - name: Name to home page
       shell: docker exec app1 sed -i '5i\<li>App1</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
