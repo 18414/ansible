@@ -77,9 +77,8 @@
         - "{{ ext_ip.stdout }}"
      
       
-    - name: start nginx service 
-      shell: docker exec nginx /etc/init.d/nginx start 
-      register: ngstart
-    - debug: 
-        var: ngstart
-        - "{{ ext_ip.stdout }}"
+   # - name: start nginx service 
+    #  shell: docker exec nginx /etc/init.d/nginx start 
+     # register: ngstart
+#    - debug: 
+ #       var: ngstart
