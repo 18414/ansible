@@ -69,11 +69,12 @@
       register: ext_ip
 
     - name: Configure Nginx
-      shell: docker exec nginx sed  -e 's/"{{ item }}"\b/"{{ hip }}"/g' /etc/nginx/nginx.conf
-      with_items: "{{ ext_ip.stdout }}"
+      shell: docker exec nginx sed  -i -e 's/"{{ item }}"\b/"{{ hip }}"/g' /etc/nginx/nginx.conf
+      with_items:
+        - "{{ ext_ip.stdout_lines }}"
 
       
-    - name: starting nginx service 
-      command: docker exec nginx  /etc/init.d/nginx restart
-      ignore_errors: yes
+#    - name: starting nginx service 
+ #     command: docker exec nginx  /etc/init.d/nginx restart
+  #    ignore_errors: yes
 
