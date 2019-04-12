@@ -70,6 +70,7 @@
       register: ext_ip
     - debug: 
         var: ext_ip
+
     - name: Configure Nginx
       #shell: docker exec nginx sed  -i -e 's/3.17.60.70\b/{{ hip }}/g' /etc/nginx/nginx.conf
       shell: docker exec nginx sed  -i -e 's/{{ item }}\b/{{ hip }}/g' /etc/nginx/nginx.conf
