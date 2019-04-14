@@ -6,20 +6,17 @@ sed -i '/^[0-9]/d' hosts
 sleep 1
 
 #Launching EC2 instances  
-#ansible-playbook gym_mgmt_system_setup_elb_v2.yml
+ansible-playbook gym_mgmt_system_setup_nginx.yml
 sleep 1
 
-#Classic load balancer 
-ansible-playbook gym_mgmt_system_setup_classic_elb_v3.yml
 
-#installing Docker on Docker1 and Docker2
+#installing Docker 
 ansible-playbook docker_install_centos.yml
 
 grep [0-9] hosts > ip_list
-host_ip=`grep [0-9] hosts > ip_list`
+host_ip=`grep [0-9] hosts`
 
 sleep 1
-
 
 
 
