@@ -1,6 +1,9 @@
 ---
 - hosts: doc
+  strategy: debug
   become: true
+  vars: 
+    hip: "{{ hipinside }}"
   tasks:
     - name: login into docke hub registry
       docker_login:
@@ -19,7 +22,7 @@
         ports: 
           - "8081:80"
     - name: Integrate RDS with PHP
-      shell: docker exec app1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
+      shell: docker exec app1  sed -i 's/127.0.0.1/gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
 
     - name: Name to home page
       shell: docker exec app1 sed -i '5i\<li>App1</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
@@ -37,10 +40,10 @@
         ports:
           - "8082:80"
     - name: Integrate RDS with PHP
-      shell: docker exec app1  sed -i 's/127.0.0.1/gymsystemdb.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php
+      shell: docker exec app2 sed -i 's/127.0.0.1/gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php
 
     - name: Name to home page
-      shell: docker exec app1 sed -i '5i\<li>App2</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
+      shell: docker exec app2 sed -i '5i\<li>App2</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
 
 
     - name: starting the all services of containers manually
@@ -65,13 +68,18 @@
     - name: check existing IP in nginx conf file
       shell: docker exec nginx grep [0-9] /etc/nginx/nginx.conf | head -2 | tail -1 | awk -F ":" '{print $1}'| awk -F " " '{print $2}'
       register: ext_ip
+    - debug: 
+        var: ext_ip
 
     - name: Configure Nginx
-      shell: docker exec nginx sed  -e 's/"{{ item }}"\b/"{{ hip }}"/g' /etc/nginx/nginx.conf
-      with_items: "{{ ext_ip }}"
-
+      #shell: docker exec nginx sed  -i -e 's/3.17.60.70\b/{{ hip }}/g' /etc/nginx/nginx.conf
+      shell: docker exec nginx sed  -i -e 's/{{ item }}\b/{{ hip }}/g' /etc/nginx/nginx.conf
+      with_items:
+        - "{{ ext_ip.stdout }}"
+     
       
-    - name: starting nginx service 
-      command: docker exec nginx  /etc/init.d/nginx restart
-      ignore_errors: yes
-
+   # - name: start nginx service 
+    #  command: docker exec nginx service nginx start 
+     # register: ngstart
+   # - debug: 
+    #    var: ngstart
