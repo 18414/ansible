@@ -26,6 +26,7 @@ EOF
   git config --global user.email "bmahajan0@gmail.com"
   git clone https://github.com/18414/ansible.git
   echo "cd /home/ansible/ansible/playbooks" >> ~/.bashrc
+  git pull https://github.com/18414/ansible.git
 EOF
 
 
