@@ -20,4 +20,5 @@ echo -e "`tput setaf 1 ` Setting up default python version"
 update-alternatives  --set python /usr/local/bin/python3.6
 
 
+echo "alias python=/usr/local/bin/python3.6" >> ~/.bashrc
 
