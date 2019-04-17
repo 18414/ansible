@@ -1,0 +1,7 @@
+ansible_user: ansible_user
+ansible_password: Ganesha@123
+ansible_port: 5985
+ansible_connection: winrm
+ansible_winrm_transport: basic
+ansible_winrm_operation_timeout_sec: 60
+ansible_winrm_read_timeout_sec: 70

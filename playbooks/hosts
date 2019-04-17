@@ -1,9 +1,8 @@
 [local]
 localhost
 
-[doc]
-<<<<<<< HEAD
-localhost
-=======
-18.216.111.9
->>>>>>> 32fa295473f721ea8df7977d98aaddca39278b01
+
+[win]
+18.191.197.249
+
+

@@ -1,0 +1,72 @@
+Prerequisite 
+++++++++++++
+WINDOWS
+=======
+> PowerShell version 3.0
+> .NET Framework 4.0 or newer
+
+Linux
+=====
+> pip install pywinrm
+> python-pip
+> pip install xmltodict
+
+
+
+
+
+
+Configure on Ansible control node
+=================================
+
+[ansible@ip-172-31-46-118 ~]$ cat /etc/ansible/group_vars/all.yml
+ansible_user: ansible_user  # User which created on windows
+ansible_password: password # password of user which created on windows
+ansible_port: 5985 # winrm port
+ansible_connection: winrm
+ansible_winrm_transport: basic
+ansible_winrm_operation_timeout_sec: 60
+ansible_winrm_read_timeout_sec: 70
+
+
+
+
+Configure Windows hosts
+=======================
+
+NET USER ansible_user "your_password_here" /ADD
+NET LOCALGROUP "Administrators" "ansible_user" /ADD
+Set-Item -Path WSMan:\localhost\Service\Auth\Basic -Value $true
+Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value $true
+netsh advfirewall firewall add rule name="WinRM" dir=in action=allow protocol=TCP localport=5985 remoteip=10.10.1.2
++++++++++++++++++++
+
+Download and Run below powershell script
+=======
+
+https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+
+CMD: powershell.exe -ExecutionPolicy Bypass -File ConfigureRemotingForAnsible.ps1 -CertValidityDays 3650 -Verbose
+VERBOSE: Verifying WinRM service.
+
+
+
+
+Biblioraphy
+===========
+https://medium.com/@georgimarokov/getting-started-with-ansible-and-configuring-windows-machines-f54c67e1be5c
+https://fedoramagazine.org/controlling-windows-via-ansible/
+
+################# SAMPLE PLAYBOOK
+
+
+[ansible@ip-172-31-46-118 ~]$ cat   create_u.yml
+---
+- hosts: win
+  tasks:
+    - name: Ensure Mahesh user is present
+      win_user:
+        name: Abhi
+        state: present
+        group: Administrator
+
