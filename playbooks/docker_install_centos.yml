@@ -1,5 +1,5 @@
 ---
-  - hosts: doc
+  - hosts: "{{ host_name }}"
     become: yes
     tasks:
       - name: "add docker repository"
