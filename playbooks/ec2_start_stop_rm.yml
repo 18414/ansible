@@ -1,0 +1,39 @@
+---
+  - name: Provision an EC2 Instance
+    hosts: localhost
+    connection: local
+    gather_facts: False
+    become: true
+    tasks:
+      - name: Stop ec2 Instance
+        ec2:
+          instance_ids: "{{ iid }}"
+          key_name: aws_final
+          region: us-east-2
+          vpc_subnet_id: subnet-052af449
+          assign_public_ip: yes
+          wait: yes
+          state: stopped
+        tags: shut
+      
+      - name: Launch the new EC2 Instance
+        ec2:
+          instance_ids: "{{ iid }}"
+          key_name: aws_final
+          region: us-east-2
+          vpc_subnet_id: subnet-052af449
+          assign_public_ip: yes
+          wait: yes
+          state: running
+        tags: run
+
+      - name: Launch the new EC2 Instance
+        ec2:
+          instance_ids: "{{ iid }}"
+          key_name: aws_final
+          region: us-east-2
+          vpc_subnet_id: subnet-052af449
+          assign_public_ip: yes
+          wait: yes
+          state: absent
+        tags: rm

@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: doc
   become: true
   gather_facts: no
   tasks: 
@@ -12,4 +12,6 @@
     - name: Unarchive and Install JDK
       unarchive:  
         src: /tmp/jdk-9.0.4_linux-x64_bin.tar.gz
-        dest: /opt/jdk-9.0.4_linux-x64_bin.tar.gz
+        dest: /opt/
+        #extra_opts:  ["--use-compress-program=pbzip2","--exclude=data/tmp"]
+        remote_src: yes
