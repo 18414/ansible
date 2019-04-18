@@ -19,8 +19,6 @@
           group: Newsc
           vpc_subnet_id: subnet-052af449
           assign_public_ip: yes
-          #aws_access_key: AKIAYTUZEIPKTKHPCLL5
-          #aws_secret_key: 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
           wait: yes
           count_tag:
             application: Gym-management-system
