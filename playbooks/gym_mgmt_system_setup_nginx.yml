@@ -12,8 +12,8 @@
         ec2:
           instance_type: t2.micro
           key_name: aws_final
-          image: ami-0cd3dfa4e37921605
-          #image: ami-01eb7a7f8688ed90b
+          image: ami-0f2b4fc905b0bd1f1 # AWS Market CentOS7
+          #image: ami-01eb7a7f8688ed90b Centos7 Basic
           user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"
           region: us-east-2
           group: Newsc
