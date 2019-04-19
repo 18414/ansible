@@ -5,13 +5,16 @@
   tasks: 
     - name: Download jdk
       get_url: 
-        url: http://download.oracle.com/otn-pub/java/jdk/9.0.4+11/c2514751926b4512b076cc82f959763f/jdk-9.0.4_linux-x64_bin.tar.gz
+        url: http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-i586.tar.gz
+        headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
+        dest: /tmp/jdk-8u131-linux-i586.tar.gz
         #headers:  "Cookie: oraclelicense=accept-securebackup-cookie"
-        dest: /tmp/jdk-9.0.4_linux-x64_bin.tar.gz
 
     - name: Unarchive and Install JDK
-      unarchive:  
-        src: /tmp/jdk-9.0.4_linux-x64_bin.tar.gz
-        dest: /opt/
-        #extra_opts:  ["--use-compress-program=pbzip2","--exclude=data/tmp"]
-        remote_src: yes
+      shell: tar -xvf /tmp/jdk-8u131-linux-i586.tar.gz -C /opt
+  
+    - name: Set ENV variable
+      shell: 'for f in `ls /opt/jdk1.8.0_131/bin`; do update-alternatives --install "/usr/bin/${f}" "${f}" "/opt/jdk1.8.0_131/bin/${f}" 1; done'
+   
+    - name: Update java alertive using bash script
+      script: /home/ansible/ansible/playbooks/java_update_alt.sh --some-argument 1.8.0_1318

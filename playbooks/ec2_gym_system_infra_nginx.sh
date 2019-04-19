@@ -5,6 +5,9 @@
 sed -i '/^[0-9]/d' hosts
 sleep 1
 
+### NTP 
+sudo ntpdate us.pool.ntp.org
+
 #Launching EC2 instances  
 ansible-playbook gym_mgmt_system_setup_nginx.yml
 

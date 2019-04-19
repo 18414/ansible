@@ -1,0 +1,19 @@
+--
+- hosts: doc
+  become: true
+  gather_facts: no
+  tasks:
+    - include: 
+
+    - name: install jenkins on centos7
+      yum: name=jenkins state=latest
+
+    - name: Start and enable Jenkins service
+    - service: name=jenkins state=started state=enabled
+      register: stat
+
+    - name: show the status of the service
+    - debug: var=stat.stdout
+
+     
+  
