@@ -16,7 +16,7 @@
           state: stopped
         tags: shut
       
-      - name: Launch the new EC2 Instance
+      - name: Start EC2 Instance
         ec2:
           instance_ids: "{{ iid }}"
           key_name: aws_final
@@ -27,7 +27,7 @@
           state: running
         tags: run
 
-      - name: Launch the new EC2 Instance
+      - name: Destroying EC2 Instance
         ec2:
           instance_ids: "{{ iid }}"
           key_name: aws_final
