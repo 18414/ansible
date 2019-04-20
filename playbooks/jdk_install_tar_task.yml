@@ -1,25 +1,26 @@
 ---
     - name: Download jdk
       get_url: 
-        url: http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-i586.tar.gz
+        url: https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz
         headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
-        dest: /tmp/jdk-8u131-linux-i586.tar.gz
+        dest: /tmp/jdk-8u201-linux-x64.tar.gz
         #headers:  "Cookie: oraclelicense=accept-securebackup-cookie"
 
     - name: Unarchive and Install JDK
-      shell: tar -xvf /tmp/jdk-8u131-linux-i586.tar.gz -C /opt
+      shell: tar -xvf /tmp/jdk-8u201-linux-x64.tar.gz -C /opt
   
     - name: Set ENV variable
-      shell: 'for f in `ls /opt/jdk1.8.0_131/bin`; do update-alternatives --install "/usr/bin/${f}" "${f}" "/opt/jdk1.8.0_131/bin/${f}" 1; done'
+      shell: 'for f in `ls /opt/jdk-8u201/bin`; do update-alternatives --install "/usr/bin/${f}" "${f}" "/opt/jdk-8u201/bin/${f}" 1; done'
    
     - name: Update java alertive using bash script
-      script: /home/ansible/ansible/playbooks/java_update_alt.sh --some-argument 1.8.0_1318
+      script: /home/ansible/ansible/playbooks/java_update_alt.sh --some-argument -8u201
    
     - name: ENV VAR JAVA
       shell: echo "{{ item }}" >> /root/.bash_profile
       with_items: 
-        - JAVA_HOME=/opt/jdk1.8.0_131 
-        - export JAVA_HOME
-        - PATH=$PATH:$JAVA_HOME 
+        - export JAVA_HOME=/opt/jdk-8u201/bin
+        - export JRE_HOME=/opt/jdk-8u201/jre
+        - export PATH=$PATH:/opt/jdk-8u201/bin:/opt/jdk-8u201/jre/bin 
       tags: j
-     
+    
+

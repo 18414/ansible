@@ -1,0 +1,7 @@
+---
+      - name: Install JDK 
+        yum: 
+          name: java-1.8*
+          state: latest 
+          
+  

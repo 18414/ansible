@@ -1,19 +1,4 @@
 ---
-- hosts: doc
-  become: true
-  gather_facts: no
-  tasks:
-    - name: Install JDK
-      yum:
-        name: java-1.8*
-        state: latest
-
-    - name: Set ENV JAVA var
-      shell: echo "{{ item }}" >> /root/.bashrc
-      with_items: 
-        - JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-0.el7_6.x86_64
-        - PATH=$PATH:$JAVA_HOME:$HOME/bin
-
     - name: Add repository
       get_url:
         url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
