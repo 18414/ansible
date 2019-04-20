@@ -5,7 +5,7 @@
   tasks:
     - name: Install JDK
       yum:
-        name: java-1.8*
+        name: java-1.8.0-openjdk-devel*
         state: latest
 
     - name: Set ENV JAVA var

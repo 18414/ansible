@@ -37,3 +37,7 @@
           wait: yes
           state: absent
         tags: rm
+        register: stat
+      - debug: var=stat.stdout
+#        tags: rm
+        
