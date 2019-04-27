@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  become: true
+  gather_facts: no
+  tasks:
+   - name: Download MySQL rpm
+     get_url:
+       url:  http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+       dest: /tmp/mysql-community-release-el7-5.noarch.rpm
+  
+   - name: Install MySQL 
+     command: rpm -ivh /tmp/mysql-community-release-el7-5.noarch.rpm
+     ignore_errors: true
+  
+   - name: Install MySQL
+     yum: 
+       name: mysql-server
+       state: latest
+       
+  
+   - name: Start MySQL service
+     service: 
+       name: mysqld
+       state: started
+       enabled: yes
+    
+    
