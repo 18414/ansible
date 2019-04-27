@@ -8,20 +8,30 @@
        url:  http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
        dest: /tmp/mysql-community-release-el7-5.noarch.rpm
   
-   - name: Install MySQL 
+   - name: Install MySQL  repo
      command: rpm -ivh /tmp/mysql-community-release-el7-5.noarch.rpm
      ignore_errors: true
   
    - name: Install MySQL
      yum: 
-       name: mysql-server
-       state: latest
-       
+       name: "{{ item }}" 
+       state: latest 
+     with_items: 
+       - mysql-server
+       - MySQL-python       
   
    - name: Start MySQL service
      service: 
        name: mysqld
        state: started
        enabled: yes
+  
+   - name: import DB to MySQL
+     mysql_db: 
+       name: gym_management_system
+       login_user: bhushan
+       login_password: "{{ passwd }}"
+       target: gym_management_system.sql
+       state: import
     
     
