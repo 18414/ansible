@@ -16,8 +16,11 @@ EOF
   yum install epel-release -y > /dev/null
   yum install ansible -y  /dev/null
   yum install git -y
-  #git config --global user.name "Bhushan Mahajan"
-  #git config --global user.email "bmahajan0@gmail.com"
+  yum install -y wget
+  wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
+  rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+  yum install jenkins  java-1.8.0-openjdk-devel git -y
+
 
   ## Git clone
 
