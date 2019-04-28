@@ -1,5 +1,5 @@
 ---
-- hosts: doc
+- hosts: localhost
   become: true
   gather_facts: no
   tasks:
@@ -32,6 +32,12 @@
 
     - name: show the status of the service
       debug: var=stat.stdout
-
+    
+    - name: Install apache ant
+      yum: name={{ item }} state=latest 
+      with_items: 
+        - ant
+        - ant-junit
+      tags: ant
      
   
