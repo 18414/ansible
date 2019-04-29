@@ -80,8 +80,3 @@
         - "{{ ext_ip.stdout }}"
      
       
-   # - name: start nginx service 
-    #  command: docker exec nginx service nginx start 
-     # register: ngstart
-   # - debug: 
-    #    var: ngstart
