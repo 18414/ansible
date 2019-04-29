@@ -1,6 +1,8 @@
 - name: Configure RDS 
   hosts: localhost
   become: true
+  vars_file: 
+    - docker_hub.yml
   tasks: 
     - name: Provision RDS 
       rds: 
@@ -8,8 +10,8 @@
         db_engine: MySQL
         allocated_storage: 10
         instance_type: db.t2.micro 
-        username: bhushan
-        password: ganesha123
+        username: "{{ username }}"
+        password: "{{ password }}"
         security_groups: Newsc
         db_name: gym_management_system
         port: 3306

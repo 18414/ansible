@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  strategy: debug
+  become: true
+  vars_files: 
+    - docker_hub.yml 
+  tasks:
+    - name: login into docke hub registry
+      docker_login:
+        email: "bmahajan0@gmail.com"
+        username: "{{ username }}" 
+        password: "{{ password }}"
+
+    - name: launch container App1 
+      docker_container: 
+        name: app1
+        state: started
+        image: "bmahajan/lb:app1"
+        pull: true
+        detach: yes
+        tty: yes
+        ports: 
+          - "8081:80"
+
+    - name: launch container App2 
+      docker_container:
+        name: app2
+        state: started
+        image: "bmahajan/lb:app2"
+        pull: true
+        detach: yes
+        tty: yes
+        ports:
+          - "8082:80"
