@@ -8,6 +8,7 @@
       - name: list current running instance ID
         shell: sudo aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running --output text
         register: instance_id
+        tags: rg 
 
       - debug: var=instance_id.stdout
         
@@ -41,12 +42,7 @@
           vpc_subnet_id: subnet-052af449
           assign_public_ip: yes
           wait: yes
-          volumes:       
-              device_name: /dev/sda1
-              delete_on_termination: true
           state: absent
         tags: rm
-        register: stat
-      - debug: var=stat.stdout
-        
+              
         
