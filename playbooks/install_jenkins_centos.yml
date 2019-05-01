@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: doc
   become: true
   gather_facts: no
   tasks:
