@@ -6,15 +6,14 @@
     become: true
     tasks:
       - name: list current running instance ID
-        shell: sudo aws ec2 describe-instances --query 'Reservations[*].Instances[*].InstanceId' | tr -d "]" | tr -d "[" | tr -d '"'| sed '/^$/d'
+        shell: sudo aws ec2 describe-instances --query 'Reservations[*].Instances[*].InstanceId' |  tr -d "[" | tr -d "]"|  grep -v "^$" | tr -d '"' | tr -d [:space:]  
         register: instance_id
 
-      - debug: 
-          var: instance_id
-
+      - debug: var=instance_id.stdout
+        
       - name: Stop ec2 Instance
         ec2:
-          instance_ids: "{{ instance_id.stdout_lines }}"
+          instance_ids: "{{ instance_id.stdout }}"
           key_name: aws_final
           region: us-east-2
           vpc_subnet_id: subnet-052af449
