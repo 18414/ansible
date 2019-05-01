@@ -6,7 +6,7 @@
     become: true
     tasks:
       - name: list current running instance ID
-        shell: sudo aws ec2 describe-instances --query 'Reservations[*].Instances[*].InstanceId' |  tr -d "[" | tr -d "]"|  grep -v "^$" | tr -d '"' | tr -d [:space:]  
+        shell: sudo aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running --output text
         register: instance_id
 
       - debug: var=instance_id.stdout
@@ -42,6 +42,7 @@
           assign_public_ip: yes
           wait: yes
           volumes:       
+              device_name: /dev/sda1
               delete_on_termination: true
           state: absent
         tags: rm
