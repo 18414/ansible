@@ -45,6 +45,8 @@
         with_items: 
           - docker-ce
           - docker-python
+          - docker-compose
+
       - name: "add docker group"
         group: name=docker state=present
   
