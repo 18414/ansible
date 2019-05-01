@@ -24,7 +24,7 @@
       
       - name: Start EC2 Instance
         ec2:
-          instance_ids: "{{ instance_id.stdout_lines }}"
+          instance_ids: "{{ instance_id.stdout }}"
           key_name: aws_final
           region: us-east-2
           vpc_subnet_id: subnet-052af449
@@ -35,12 +35,14 @@
 
       - name: Destroying EC2 Instance
         ec2:
-          instance_ids: "{{ instance_id.stdout_lines }}"
+          instance_ids: "{{ instance_id.stdout }}"
           key_name: aws_final
           region: us-east-2
           vpc_subnet_id: subnet-052af449
           assign_public_ip: yes
           wait: yes
+          volumes:       
+              delete_on_termination: true
           state: absent
         tags: rm
         register: stat
