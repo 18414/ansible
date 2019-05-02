@@ -1,9 +1,8 @@
----
-- hosts: localhost
+- hosts: localhost 
   strategy: debug
-  gather_facts: yes
-  vars: 
-    pkg_name: httpd
-  tasks: 
-    - name: Install packagele
-      yum: name={{ pkg_name }} state=latest
+  gather_facts: no
+  vars:
+    var1: value1
+  tasks:
+    - name: wrong variable
+      ping: data={{ wrong_var }}
