@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  strategy: debug
+  gather_facts: yes
+  vars: 
+    pkg_name: httpd
+  tasks: 
+    - name: Install packagele
+      yum: name={{ pkg_name }} state=latest

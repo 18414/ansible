@@ -1,6 +1,7 @@
 ---
-  - hosts: localhost
+  - hosts: doc
     become: yes
+    strategy: debug
     tasks:
       - name: "add docker repository"
         get_url:
@@ -45,7 +46,7 @@
         with_items: 
           - docker-ce
           - docker-python
-          - docker-compose
+         # - docker-compose
 
       - name: "add docker group"
         group: name=docker state=present
@@ -60,3 +61,15 @@
         shell: docker info
         register: docker_info
         changed_when: False 
+
+      - name: Install Docker compose pre
+        yum:  
+          name: "{{ item }}" 
+          state: installed
+        with_items: 
+          - epel-release
+          - python-pip
+
+      - name: install Docker compose
+        pip: 
+          name: docker-compose
