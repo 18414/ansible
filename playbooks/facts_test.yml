@@ -1,0 +1,10 @@
+---
+- hosts: doc
+  become: yes
+  gather_facts: yes
+  vars: 
+    os: "{{ ansible_os_family }}"
+  tasks: 
+    - name: print os
+      debug: var=os
+   
