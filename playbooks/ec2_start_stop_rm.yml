@@ -2,8 +2,10 @@
   - name: Provision an EC2 Instance
     hosts: localhost
     connection: local
-#   gather_facts: False
     become: true
+    vars_prompt: 
+      - name: "instance_name"
+        prompt: "pleas enter the instance id ?"
     tasks:
       - name: list current running instance ID
         shell: sudo aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running --output text
@@ -14,7 +16,7 @@
         
       - name: Stop ec2 Instance
         ec2:
-          instance_ids: "{{ instance_id.stdout }}"
+          instance_ids: "{{ instance_name }}"
           key_name: aws_final
           region: us-east-2
           vpc_subnet_id: subnet-052af449
@@ -25,7 +27,7 @@
       
       - name: Start EC2 Instance
         ec2:
-          instance_ids: "{{ instance_id.stdout }}"
+          instance_ids: "{{ instance_name }}"
           key_name: aws_final
           region: us-east-2
           vpc_subnet_id: subnet-052af449
@@ -36,7 +38,7 @@
 
       - name: Destroying EC2 Instance
         ec2:
-          instance_ids: "{{ instance_id.stdout }}"
+          instance_ids: "{{ instance_name }}"
           key_name: aws_final
           region: us-east-2
           vpc_subnet_id: subnet-052af449
