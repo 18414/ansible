@@ -1,0 +1,14 @@
+---
+- hosts: doc
+  become: true
+  vars_prompt: 
+    - name: target_host   
+      prompt: "Please enter ip of remote server"
+      private: no
+  tasks: 
+    - add_host: 
+        name: "{{ target_host }}"
+        groups: dynamically_created_hosts
+    - name: view hosts
+      debug: var={{ target_host.stdout }}
+    
