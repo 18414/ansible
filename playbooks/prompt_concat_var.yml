@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  become: true
+  vars_prompt:
+    - name: firstname
+      prompt: enter your first name?
+
+    - name: lastname
+      prompt: enter your last name ?
+  tasks: 
+    - name: this is your full name
+      debug: var={{ firstname }}-{{ lastname }}
+      
