@@ -4,9 +4,14 @@
   vars_prompt:
     - name: firstname
       prompt: enter your first name?
+      private: no
+      default: Bhushan
 
     - name: lastname
       prompt: enter your last name ?
+      private: no
+      default: MAHAJAN
+
   tasks: 
     - name: this is your full name
       debug: var={{ firstname }}-{{ lastname }}
