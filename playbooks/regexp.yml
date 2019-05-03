@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Replace string
+      replace: 
+        path: /home/ansible/ansible/playbooks/regex.txt
+        regexp: cybage
+        replace: HSBC
+        
+         
