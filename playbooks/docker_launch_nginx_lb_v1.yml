@@ -17,7 +17,7 @@
       docker_container: 
         name: app1
         state: started
-        image: "bmahajan/lb:app1"
+        image: "bmahajan/lb:app2new"
         pull: true
         detach: yes
         tty: yes
@@ -35,7 +35,7 @@
       docker_container:
         name: app2
         state: started
-        image: "bmahajan/lb:app2"
+        image: "bmahajan/lb:app2new"
         pull: true
         detach: yes
         tty: yes
