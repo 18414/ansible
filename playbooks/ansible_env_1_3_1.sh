@@ -1,6 +1,6 @@
 #!/bin/bash
 # Create Ansible Environment
-# Version: 1.0
+# Version: 1.3.1
 # Author : Bhushan Mahajan
 # Date:- 09-JAN-2018
 # Updated date: 05-May-2019
@@ -28,8 +28,10 @@ echo -e "`tput setaf 3`\t\t2) Grant sudo access `tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t3) create a key SSH-KEYGEN `tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t4) Copy key and give_Perm to File-Dir`tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t5) Install Ansible latest version`tput sgr0`\n"
-echo -e "`tput setaf 3`\t\t6) Configure Ansible Inventory `tput sgr0`\n"
-echo -e "`tput setaf 3`\t\t7) Add remote server to the Ansible control node`tput sgr0`\n"
+echo -e "`tput setaf 3`\t\t6) Install and configure git `tput sgr0`\n"
+echo -e "`tput setaf 3`\t\t7) Configure Ansible Inventory`tput sgr0`\n"
+echo -e "`tput setaf 3`\t\t8) Add Remote server`tput sgr0`\n"
+echo -e "`tput setaf 3`\t\t9) Install Jenkins`tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t0) Exit`tput sgr0`\n"
 }
 
@@ -47,7 +49,7 @@ echo "$user_name" | passwd --stdin $user_name
         echo -e "`tput setaf 1`User $user_name has not added please try again`tput sgr0`"
                 pause
   fi
-
+clear
 }
 
 
@@ -61,6 +63,7 @@ echo -e -n "`tput setaf 2``tput bold`\nGranting sudo access to $user_name user `
 ## NOTE: Put double backslash before the variable and escapae the string in SED 
 
      sed -i "/^root/a \\$user_name ALL=(ALL) NOPASSWD: ALL" /etc/sudoers > /dev/null
+clear
 }
 
 
@@ -72,6 +75,7 @@ create_key()
     su - $user_name << EOF
     echo -e "\n"|ssh-keygen -t rsa -N ""    
 EOF
+clear
 }
 
 
@@ -97,6 +101,7 @@ gv_perm()
           fi
 
             echo "$k" > /home/$user_name/.ssh/authorized_keys
+clear
 }
 
 
@@ -114,6 +119,27 @@ ansible_install()
       yum install epel-release -y > /dev/null
       yum install ansible -y  /dev/null
   fi
+  
+   yum install -y vim wget 
+clear
+}
+
+
+git_install()
+{
+
+## Git clone
+   yum -y install git
+  su - $user_name << EOF
+  git config --global user.name "Bhushan Mahajan"
+  git config --global user.email "bmahajan0@gmail.com"
+  git clone https://github.com/18414/ansible.git
+  echo "cd /home/ansible/ansible/playbooks" >> ~/.bashrc
+  cd /home/ansible/ansible
+  git pull https://github.com/18414/ansible.git
+EOF
+
+clear
 }
 
 
@@ -146,6 +172,7 @@ esac
 ### case end ### 
 
 done
+clear
 }
 
 remote_srv()
@@ -156,15 +183,28 @@ remote_srv()
  read -p "Enter remote server IP: " r_server
 
  #ssh-copy-id -o "StrictHostKeyChecking=no" $r_server
+ #ssh -o "StrictHostKeyChecking=no" $r_server "echo $(~/.ssh/id_rsa.pub) >> ~/.ssh/authorized_keys"
  echo -e "`tput setaf 2`Create the $user_name user on the remote server`tput sgr0`"
  ssh $r_server "useradd $user_name"
 
  su - $user_name << EOF   
     ssh-copy-id -o "StrictHostKeyChecking=no" $r_server
 EOF
-pause
+
+clear
 
 }
+
+
+jenkins_install()
+{
+
+  wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
+  rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+  yum install jenkins  java-1.8.0-openjdk-devel -y
+  clear
+}
+
 
 #######################################################################################
 ### get username and use as Global variable 
@@ -195,9 +235,13 @@ case "$action" in
 
 5)ansible_install;;
 
-6)ansible_inv;;
+6)git_install ;;
 
-7)remote_srv;;
+7) ansible_inv;;
+
+8)remote_srv;;
+
+9)jenkins_install;;
 
 0)exit;;
 
@@ -209,4 +253,3 @@ case "$action" in
         clear
 esac
 done
-
