@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Ensure a job that runs at 2 and 5 exists. Creates an entry like 
+      cron: 
+        name: "create file" 
+        minute: "2"       
+        job: "/home/ansible/ansible/playbooks/testme.sh" 
+       
