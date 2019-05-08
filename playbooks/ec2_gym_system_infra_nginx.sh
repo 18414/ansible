@@ -24,7 +24,7 @@ sleep 1
 
 
 #Launching containers 
-ansible-playbook docker_launch_nginx_lb_v1.yml --extra-vars  "hip=$host_ip paswd=ganesha@123"
+ansible-playbook docker_launch_nginx_lb_v1.yml  --extra-vars  "hip=$host_ip paswd=ganesha@123" 
 
 
 

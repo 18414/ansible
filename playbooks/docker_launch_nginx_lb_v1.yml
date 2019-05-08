@@ -1,17 +1,14 @@
 ---
 - hosts: doc
-  strategy: debug
   become: true
-  vars_files: 
-    - docker_hub.yml
   vars: 
     hip: "{{ hipinside }}"
   tasks:
     - name: login into docke hub registry
       docker_login:
         email: "bmahajan0@gmail.com"
-        username: "{{ username }}"
-        password: "{{ password }}"
+        username: bmahajan
+        password: "{{ paswd }}"
 
     - name: launch container App1 
       docker_container: 
@@ -24,10 +21,10 @@
         ports: 
           - "8081:80"
     - name: Integrate RDS with PHP
-      shell: docker exec app1  sed -i 's/127.0.0.1/gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php 
+      shell: docker exec app1  sed -i 's/127.0.0.1/gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/includes/db_connect.php 
 
     - name: Name to home page
-      shell: docker exec app1 sed -i '5i\<li>App1</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
+      shell: docker exec app1 sed -i '5i\<li>App1</li>\ ' /opt/lampp/htdocs/includes/footer.php
 
 
 
@@ -42,10 +39,10 @@
         ports:
           - "8082:80"
     - name: Integrate RDS with PHP
-      shell: docker exec app2 sed -i 's/127.0.0.1/gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/gym_management_system/includes/db_connect.php
+      shell: docker exec app2 sed -i 's/127.0.0.1/gym-management-system.czrdtrac0wnc.us-east-2.rds.amazonaws.com/g; s/root/bhushan/g; s/""/"ganesha123"/g'  /opt/lampp/htdocs/includes/db_connect.php
 
     - name: Name to home page
-      shell: docker exec app2 sed -i '5i\<li>App2</li>\ ' /opt/lampp/htdocs/gym_management_system/includes/footer.php
+      shell: docker exec app2 sed -i '5i\<li>App2</li>\ ' /opt/lampp/htdocs/includes/footer.php
 
 
     - name: starting the all services of containers manually
