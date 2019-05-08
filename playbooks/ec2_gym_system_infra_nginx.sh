@@ -18,7 +18,8 @@ sleep 1
 ansible-playbook docker_install_centos.yml
 
 # IP of created instance
-host_ip=$(grep [0-9] hosts)
+#host_ip=$(grep [0-9] hosts)
+host_ip=3.14.229.79
 
 sleep 1
 
