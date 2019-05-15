@@ -6,7 +6,7 @@
   gather_facts: yes
   vars_prompt: 
     name: service_name
-    prompt: please enter the service name which you want to stop before prior to patching.
+    prompt: please enter the service name which you want to stop prior to patching.
     private: no
   tasks:
     - name: old kernel version 
