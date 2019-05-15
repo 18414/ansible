@@ -1,0 +1,93 @@
+---
+- hosts: doc
+  become: true
+  #debugger: always
+  serial: 2
+  gather_facts: yes
+  vars_prompt: 
+    name: service_name
+    prompt: please enter the service name which you want to stop before prior to patching.
+    private: no
+  tasks:
+    - name: old kernel version 
+      shell: uname -r
+      register: old_kernel
+
+    - name: verify application processes are not running
+      shell: if ps -eaf | egrep "{{ service_name }}"| grep -v grep > /dev/null; then echo 'process_running';else echo 'process_not_running';fi
+      ignore_errors: true
+      register: app_process_check
+
+    - name: Decision point to start patching
+      fail: msg="{{ inventory_hostname }} have running application. Please stop the application first, then attempting patching."
+      when: app_process_check.stdout == "process_running"
+    
+    - name: Install wget and Linux firmware
+      yum: 
+        name: ['linux-firmware', 'wget']
+        state: latest
+      with_items: 
+        - linux-firmware
+        - wget
+
+    - name: add EPEL repo
+      shell: "{{ item }}"
+      with_items: 
+        - "wget https://www.elrepo.org/RPM-GPG-KEY-elrepo.org"
+        - "wget http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm"
+        - "rpm -ivh elrepo-release-7.0-2.el7.elrepo.noarch.rpm"
+      # - "yum --disablerepo='*' --enablerepo=elrepo-kernel install kernel-ml"
+      register: out
+      ignore_errors: yes 
+
+#    - fail: msg={{ out.stdout }}
+#      when: "out.rc = 0 and 'error' not in out.stdout"
+       
+      when: app_process_check.stdout == 'process_not_running' and "{{ ansible_os_family }}" == 'RedHat' #or "{{ ansible_os_family }}" == 'CentOS'
+      #when: app_process_check.stdout == 'process_not_running' and ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: upgrade all packages on the server
+      yum:
+        name: kernel
+        state: latest
+      when: app_process_check.stdout == 'process_not_running' and "{{ ansible_os_family }}" == 'RedHat' #or  "{{ ansible_os_family }}" == 'CentOS'
+      #when: app_process_check.stdout == 'process_not_running' and ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+      register: yum_update
+
+    - name: Check if reboot require after kernel update
+      shell: KERNEL_NEW=$( rpm -q -last kernel | head -1 | awk '{print $1}'| sed 's/kernel-//'); KERNEL_NOW=$(uname -r);if [[ $KERNEL_NEW != $KERNEL_NOW ]]; then echo "reboot_needed";fi
+      ignore_errors: true
+      register: reboot_required
+
+    - name: restart systemc
+      command: shutdown -r +1 "Rebooting System After Patching"
+      async: 0
+      poll: 0
+      when: reboot_required.stdout == "reboot_needed"
+      register: reboot_started
+      ignore_errors: true
+
+    - name: Pause for 180 secs
+      pause:
+        minutes: 3
+      #when: reboot_required.stdout == "reboot_needed"
+
+    - name: Check if system responding to ssh
+      local_action:
+        module: wait_for
+          host={{ inventory_hostname }}
+          port=22
+          delay=15
+          timeout=300
+          state=started
+      when: reboot_started|changed
+
+    - name: New kernel
+      shell: uname -r
+      register: new_kernel
+
+    - name: OLD KERNEL 
+      debug: var={{ old_kernel.stdout }}
+
+    - name: NEW KERNEL 
+      debug: var={{ new_kernel.stdout }}
