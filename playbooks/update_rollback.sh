@@ -20,7 +20,7 @@
  #yum history info 18
 
  undo_new=`yum history info | grep "ID" | cut -d ":" -f2`
- yum history undo $undo_new
+ yum -y history undo $undo_new 
 
  #grep -v ^# /etc/grub.conf
 

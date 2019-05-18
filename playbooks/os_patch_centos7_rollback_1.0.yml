@@ -91,7 +91,8 @@
  
 
     - pause:
-        prompt: "Do you want Rollback the update if yes continue or  CTRL-C to quit."
+        prompt: "Do you want to do Rollback the update if yes continue or CTRL-C to quit."
+        minutes: 2
 #      register: my_pause
  #     delegate_to: localhost
 
@@ -106,7 +107,7 @@
       command: shutdown -r +1 "Rebooting System After Patching"
       async: 0
       poll: 0
-      when: reboot_required.stdout == "reboot_needed"
+     #when: reboot_required.stdout == "reboot_needed"
       register: postrollback_started
       ignore_errors: true
 
