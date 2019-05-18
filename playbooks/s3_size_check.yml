@@ -5,10 +5,26 @@
   vars: 
     bucketname: abhiwing
   tasks:
-    - name: Create  S3 bucket
-      aws_s3_bucket_facts:
-        bucket: "{{ bucketname }}"
-       aws s3 ls --summarize --human-readable --recursive s3://abhiwing 
+    - name: Checking S3 bucket size
+      shell: aws s3 ls --summarize --human-readable --recursive s3://{{ bucketname }}
+      register: disk_space 
+   
+    - name: Displaying disk space
+      debug:
+        msg: "{{ disk_space.stdout }}"
+ 
+    - local_action: 
+            module: copy
+            content: "{{ disk_space.stdout }}"
+            dest: /tmp/s3space_{{ ansible_date_time.date }}.txt
         
-  
+    - name: Send an email and attachment
+      mail: 
+        to: bmahajan0@gmail.com
+        cc: rajendrakumars52@gmail.com
+        subject: S3 bucket space utilization   
+        body: Hi, Bhushan How are you ?
+        attach: /tmp/s3space_{{ ansible_date_time.date }}.txt
+      delegate_to: localhost
+   
 
