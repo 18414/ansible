@@ -130,4 +130,4 @@
       register: undo_ker
      
     - name: This is a OLD KERNEL again
-      debug: var={{ undo_ker }}
+      debug: var={{ undo_ker.stdout }}
