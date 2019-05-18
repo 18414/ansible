@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  become: true
+  connection: local
+  vars: 
+    bucketname: abhiwing
+  tasks:
+    - name: Create  S3 bucket
+      aws_s3_bucket_facts:
+        bucket: "{{ bucketname }}"
+       aws s3 ls --summarize --human-readable --recursive s3://abhiwing 
+        
+  
+

@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  become: true
+  connection: local
+  vars: 
+    bucketname: bhushan123
+  tasks:
+    - name: Put data into S3 bucket
+      aws_s3: 
+        bucket: "{{ bucketname }}"
+        object: /bhushan123/hosts
+        src: /home/ansible/ansible/playbooks/hosts
+        mode: put
+ 
+        
+        
+  
+

@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  become: true
+  connection: local
+  vars: 
+    bucketname: bhushan710
+  tasks:
+    - name: Create  S3 bucket
+      aws_s3:
+        bucket: "{{ bucketname }}"
+        mode: create
+        permission: public-read
+        
+  
+
