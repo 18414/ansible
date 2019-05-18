@@ -18,12 +18,16 @@
             content: "{{ disk_space.stdout }}"
             dest: /tmp/s3space_{{ ansible_date_time.date }}.txt
         
+    - name: Display file
+      shell: cat /tmp/s3space_{{ ansible_date_time.date }}.txt
+      register: dpf
+
     - name: Send an email and attachment
       mail: 
         to: bmahajan0@gmail.com
         cc: rajendrakumars52@gmail.com
-        subject: S3 bucket space utilization   
-        body: Hi, Bhushan How are you ?
+        subject: AWS S3 bucket space utilizion    
+        body: "{{ dpf.stdout }}"
         attach: /tmp/s3space_{{ ansible_date_time.date }}.txt
       delegate_to: localhost
    
