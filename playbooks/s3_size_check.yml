@@ -6,7 +6,8 @@
     bucketname: abhiwing
   tasks:
     - name: Checking S3 bucket size
-      shell: aws s3 ls --summarize --human-readable --recursive s3://{{ bucketname }}
+     #shell:  s3cmd la  --recursive  --human-readable
+      shell:  s3cmd la  --recursive  --human-readable | awk -F " " '{print $4,"",$3}' | perl -i -n -e "print if /s/"
       register: disk_space 
    
     - name: Displaying disk space
@@ -28,7 +29,7 @@
         cc: rajendrakumars52@gmail.com
         subject: AWS S3 bucket space utilizion    
         body: "{{ dpf.stdout }}"
-        attach: /tmp/s3space_{{ ansible_date_time.date }}.txt
+       #attach: /tmp/s3space_{{ ansible_date_time.date }}.txt
       delegate_to: localhost
    
 
