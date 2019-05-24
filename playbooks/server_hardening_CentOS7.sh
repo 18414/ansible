@@ -1,5 +1,11 @@
 #!/bin/bash
 
+## Changing Directory Colors ##
+sed -i 's/DIR 00;34/DIR 01;34/g' /etc/DIR_COLORS.xterm
+## Creating required directories ##
+mkdir -p /root/Backup/
+# Defining Functions
+## Function for red line ##
 
 
 reddline()
@@ -14,6 +20,8 @@ echo -e "\n\t\t\e[92m \e[5m"
 read -p "### Press ENTER to go back to menu ###" ;tput sgr0
 clear
 }
+
+
 
 ################### Function for Action MENU ###############################
 choose_act()
