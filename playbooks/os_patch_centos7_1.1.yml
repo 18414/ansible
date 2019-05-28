@@ -12,7 +12,7 @@
       shell: uname -r
       register: old_kernel
  
-    - name: precheck bash script to gather information prior to patching
+    - name: Gather OS information prior to patching and plz check for more info
       script: /home/ansible/ansible/playbooks/checklist.sh
 
     - name: verify application processes are not running
