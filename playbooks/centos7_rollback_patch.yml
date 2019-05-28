@@ -1,0 +1,40 @@
+---
+- hosts: doc
+  become: true
+  tasks:
+    - name: RUN Roll back script
+      script: /home/ansible/ansible/playbooks/update_rollback.sh
+    #  when: my_pause.stdout == "yes"
+
+   # - meta: end_play
+   #   when: my_pause.stdout == "no"
+
+    - name: restart systemc
+      command: shutdown -r +1 "Rebooting System After Patching"
+      async: 0
+      poll: 0
+     #when: reboot_required.stdout == "reboot_needed"
+      register: postrollback_started
+      ignore_errors: true
+
+    - name: Pause for 180 secs
+      pause:
+        minutes: 3
+
+    - name: Check if system responding to ssh
+      local_action:
+        module: wait_for
+          host={{ inventory_hostname }}
+          port=22
+          delay=15
+          timeout=300
+          state=started
+      when: postrollback_started|changed
+
+    - name: Check undo kernel
+      shell: uname -r
+      register: undo_ker
+
+    - name: This is a OLD KERNEL again
+      debug: var={{ undo_ker.stdout }}
+                                             

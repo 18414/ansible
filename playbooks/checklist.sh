@@ -184,7 +184,7 @@ MailReport
 MailReport() {
 
 /usr/sbin/sendmail -t <<!
-To: CYB_TC_TechSup_SysAdmin@travelclick.com
+To: bmahajan0@gmail.com
 Subject: CHECKLIST of $HOSTNAME
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
