@@ -257,16 +257,6 @@ echo "install net-pf-31 /bin/true" >> /etc/modprobe.d/hardening.conf
 }
 
 
-dis_uncommon_pro()
-{
-#options ipv6 disable=1
-#Disable (uncommon) protocols:
-install dccp /bin/true
-install sctp /bin/true
-install rds /bin/true
-install tipc /bin/true
-}
-
 ##########################################################
 dis_wireless()
 {
@@ -336,7 +326,7 @@ echo -e "`tput setaf 3` Enable Secure (high quality) Password Policy and enable 
 #Secure password policy rules are outlined below.
 
  authconfig --passalgo=sha512 \
- --passminlen=16 \
+ --passminlen=8 \
  --passminclass=4 \
  --passmaxrepeat=2 \
  --passmaxclassrepeat=2 \
@@ -365,98 +355,80 @@ echo -e "`tput setaf 3` Prevent Log In to Accounts With Empty Password`tput sgr0
 sleep 2
 clear
  
- ###############################
- #5.5 Set Account Expiration Following Inactivity
+###############################
+#5.5 Set Account Expiration Following Inactivity
 #Disable accounts as soon as the password has expired.
 #Open /etc/default/useradd and set the following:
 #INACTIVE=0
 sed -i 's/^INACTIVE.*/INACTIVE=0/' /etc/default/useradd
 
+
 #####################################################################
 #5.6 Secure Pasword Policy
 #Open /etc/login.defs and set the following:
 
- sed -i -e 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS 60/' \
+sed -i -e 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS 60/' \
   -e 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS 1/' \
   -e 's/^PASS_MIN_LEN.*/PASS_MIN_LEN 14/' \
   -e 's/^PASS_WARN_AGE.*/PASS_WARN_AGE 14/' /etc/login.defs
- 
+
+#############################################################
 #5.7 Log Failed Login Attemps
 #Open /etc/login.defs and enable logging:
 #Also add a delay in seconds before being allowed another attempt after a login failure:
-FAILLOG_ENAB yes
-FAIL_DELAY 4
+echo "FAILLOG_ENAB yes" >> /etc/login.defs
+echo "FAIL_DELAY 4" >> /etc/login.defs
+
 
 ##############################################################
 #5.8 Ensure Home Directories are Created for New Users
 #Open /etc/login.defs and configure:
-CREATE_HOME yes
+echo "CREATE_HOME yes" /etc/login.defs
+
+
 
 #####################################################
-#5.9 Verify All Account Password Hashes are Shadowed
+echo -e "`tput setaf 3`#5.9 Verify All Account Password Hashes are Shadowed`tput sgr0`"
 #The command below should return “x”:
 cut -d: -f2 /etc/passwd|uniq
 
+}
+
+pam_set()
+{
 ###################################################
-#5.10 Set Deny and Lockout Time for Failed Password Attempts
+echo -e "`tput setaf 3`Set Deny and Lockout Time for Failed Password Attempts`tput sgr 0`"
+sleep 2
+#echo -e "tput setaf 3Set Deny and Lockout Time for Failed Password Attempts`tput sgr0`"
 #Add the following line immediately before the pam_unix.so statement in the AUTH section of /etc/pam.d/system-auth and /etc/pam.d/password-auth:
-auth required pam_faillock.so preauth silent deny=3 unlock_time=900 fail_interval=900
+echo "auth    required    pam_faillock.so    preauth    silent deny=3    unlock_time=900    fail_interval=900" >> /etc/pam.d/system-auth
+
 
 #Add the following line immediately after the pam_unix.so statement in the AUTH section of /etc/pam.d/system-auth and /etc/pam.d/password-auth:
-auth [default=die] pam_faillock.so authfail deny=3 unlock_time=900 fail_interval=900
+echo "auth  [default=die]    pam_faillock.so    authfail    deny=3    unlock_time=900    fail_interval=900" >> /etc/pam.d/system-auth
 
 #Add the following line immediately before the pam_unix.so statement in the ACCOUNT section of /etc/pam.d/system-auth and /etc/pam.d/password-auth:
-account required pam_faillock.so
+echo "account        required      pam_faillock.so" >> /etc/pam.d/system-auth
 
-#The content of the file /etc/pam.d/system-auth can be seen below.
+#Allow users to reuse recent passwords by adding the remember option
+echo  "password      sufficient    pam_unix.so sha512      shadow      try_first_pass use_authtok     remember=5" >> 
 
-#%PAM-1.0
-auth        required      pam_env.so
-auth        required      pam_faillock.so preauth silent deny=3 unlock_time=900 fail_interval=900
-auth        sufficient    pam_unix.so  try_first_pass
-auth        [default=die] pam_faillock.so authfail deny=3 unlock_time=900 fail_interval=900
-auth        requisite     pam_succeed_if.so uid >= 1000 quiet_success
-auth        required      pam_deny.so
-
-account     required      pam_faillock.so
-account     required      pam_unix.so
-account     sufficient    pam_localuser.so
-account     sufficient    pam_succeed_if.so uid < 1000 quiet
-account     required      pam_permit.so
-
-password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
-password    sufficient    pam_unix.so sha512 shadow  try_first_pass use_authtok remember=5
-password    required      pam_deny.so
-
-session     optional      pam_keyinit.so revoke
-session     required      pam_limits.so
--session    optional      pam_systemd.so
-session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
-session     required      pam_unix.so
-
-Also, do not allow users to reuse recent passwords by adding the remember option.
-
-#Make /etc/pam.d/system-auth and /etc/pam.d/password-auth configurations immutable so that they don’t get overwritten when authconfig is run:
 chattr +i /etc/pam.d/system-auth /etc/pam.d/password-auth
+}
 
-
-#Accounts will get locked after 3 failed login attemtps:
-login[]: pam_faillock(login:auth): Consecutive login failures for user tomas account temporarily locked 
-
-#Use the following to clear user’s fail count:
- faillock --user tomas --reset
- 
- ###############################################
-#5.11 Set Boot Loader Password
+boot_loader()
+{
+####################################################################################################
+echo -e "`tput setaf 3`Set Boot Loader Password`tput sgr0`"
 #Prevent users from entering the grub command line and edit menu entries:
 grub2-setpassword
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
 #This will create the file /boot/grub2/user.cfg if one is not already present, which will contain the hashed Grub2 bootloader password.
 #Verify permissions of /boot/grub2/grub.cfg:
- chmod 0600 /boot/grub2/grub.cfg
+chmod 0600 /boot/grub2/grub.cfg
  
- ########################################
+########################################
 #5.12 Password-protect Single User Mode
 #CentOS 7 single user mode is password protected by the root password by default as part of the design of Grub2 and systemd.
 
@@ -484,28 +456,11 @@ readonly TMOUT=900
 
 sed -i 's/HISTSIZE=.*/HISTSIZE=5000/g' /etc/profile
 
-############################################################
-#7. System Settings – Software Integrity Checking
-#7.1 Advanced Intrusion Detection Environment (AIDE)
-#Install AIDE:
- yum install aide
- 
-#Build AIDE database:
- /usr/sbin/aide --init
-#By default, the database will be written to the file /var/lib/aide/aide.db.new.gz.
- cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
- 
-#Storing the database and the configuration file /etc/aide.conf (or SHA2 hashes of the files) in a secure location provides additional assurance about their integrity.
-#Check AIDE database:
- /usr/sbin/aide --check
- 
-#By default, AIDE does not install itself for periodic execution. Configure periodic execution of AIDE by adding to cron:
-echo "30 4 * * * root /usr/sbin/aide --check|mail -s 'AIDE' root@example.com" >> /etc/crontab
+}
 
-#Periodically running AIDE is necessary in order to reveal system changes.
 
 #############################################
-1. Services – SSH Server
+echo -e "`tput setaf 7``tput bold`Services – SSH Server hardening`tput sgr0`"
 
 #Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 
@@ -517,13 +472,15 @@ echo "30 4 * * * root /usr/sbin/aide --check|mail -s 'AIDE' root@example.com" >>
 
 # INFO is a basic logging level that will capture user login/logout activity.
 # DEBUG logging level is not recommended for production servers.
-LogLevel INFO
+#echo -e "LogLevel INFO"
 
 # Disconnect if no successful login is made in 60 seconds.
-LoginGraceTime 60
+#LoginGraceTime 60
 
-# Do not permit root logins via SSH.
-PermitRootLogin no
+echo -e "`tput setaf 3`Do not permit root logins via SSH`tput sgr0`"
+
+sed 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+
 
 # Check file modes and ownership of the user's files before login.
 StrictModes yes
