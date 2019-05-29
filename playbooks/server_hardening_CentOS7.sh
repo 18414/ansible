@@ -552,30 +552,9 @@ ClientAliveCountMax 0
  yum install postfix
  systemctl enable postfix.service
  
-#Open /etc/postfix/main.cf and configure the following to act as a null client:
-
-smtpd_banner = $HOSTNAME ESMTP
-inet_interfaces = loopback-only
-inet_protocols = ipv4
-mydestination =
-local_transport = error: local delivery disabled
-unknown_local_recipient_reject_code = 550
-mynetworks = 127.0.0.0/8
-relayhost = [mail.example.com]:587
-Optionally (depending on your setup), you can configure Postfix to use authentication:
 
 # yum install cyrus-sasl-plain
 #Open /etc/postfix/main.cf and add the following:
-
-smtp_sasl_auth_enable = yes
-smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
-smtp_sasl_security_options = noanonymous
-smtp_tls_CApath = /etc/ssl/certs
-smtp_use_tls = yes
-Open /etc/postfix/sasl_passwd and put authentication credentials in a format of:
-
-[mail.example.com]:587 user@example.com:password
-
 #Set permissions and create a database file:
  chmod 0600 /etc/postfix/sasl_passwd
  postmap /etc/postfix/sasl_passwd
