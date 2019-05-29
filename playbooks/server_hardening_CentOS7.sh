@@ -635,12 +635,7 @@ Open /etc/postfix/sasl_passwd and put authentication credentials in a format of:
 ######  
 #Check all enabled services:
  systemctl list-unit-files --type=service|grep enabled
-  #Disable kernel dump service:
 
- systemctl disable kdump.service
- systemctl mask kdump.service
-#Disable everything that is not required, e.g.:
-# systemctl disable tuned.service
 
 ########################
 #5. Services – Restrict at and cron to Authorised Users
