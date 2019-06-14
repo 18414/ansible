@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: create file
+      file: 
+        path: /tmp/newdir
+        state: directory
+      register: d
+      
+#    - debug: msg={{ d.stdout }}
+
+ #   - name: append line 
+#      lineinfile: 
+  #      path: /tmp/newfile
+   #     line: "{{ d.uid }}"
+
+       
+    

@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  become: true
+  handlers: 
+    - name: restart apache
+      service: name=httpd state=restarted
+      listen: "restart web"
+  tasks: 
+    - name: install httpd
+      yum: 
+        name: httpd
+        state: latest
+
+    - name: start service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+ 
+    - name: change configuration
+      replace: 
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^DocumentRoot. *$'
+        replace: 'DocumentRoot "/opt/www"'
+        backup: yes
+      notify: "restart web"
+
