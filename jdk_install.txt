@@ -1,0 +1,16 @@
+719  cd /opt
+  720  wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz"
+  721  ls -lrh
+  722  tar -zxvf jdk-8u201-linux-x64.tar.gz
+  723  cd cd jdk1.8.0_201/
+  724   cd jdk1.8.0_201/
+  725  ls -lr
+  726  alternatives --install /usr/bin/java java /opt/jdk1.8.0_201/bin/java 2
+  727  alternatives --config java
+  728  alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_201/bin/jar 2
+  729  alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_201/bin/javac 2
+  730  alternatives --set jar /opt/jdk1.8.0_201/bin/jar
+  731  alternatives --set javac /opt/jdk1.8.0_201/bin/javac
+  732  java -version
+  733  history
+

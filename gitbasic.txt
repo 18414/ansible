@@ -1,0 +1,322 @@
+Step1
+=====
+yum -y install git*
+
+Step2
+=====
+mkdir ansible
+
+
+step3
+=====
+cd ansible
+
+
+===============================================================================
+********************************COnfiguration**********************************
+git config --global user.name "Bhushan Mahajan"
+
+git config --global user.email "mahajan.bhushan1990@gmail.com"
+
+git config --list
+
+===============================================================================
+
+******************************* SSH PASSWORDLESS SSH *************************
+ssh-keygen -t rsa -b 4096
+enter passphrase *
+
+copy the public ket to the github in the setting section of SSH/GPG key then submit
+
+****************Output sample **************************
+git clone git@github.com:18414/ansible.git
+Cloning into 'ansible'...
+Warning: Permanently added the RSA host key for IP address '192.30.253.112' to the list of known hosts.
+Enter passphrase for key '/home/gitbaba/.ssh/id_rsa':
+remote: Enumerating objects: 44, done.
+remote: Counting objects: 100% (44/44), done.
+remote: Compressing objects: 100% (28/28), done.
+remote: Total 47 (delta 9), reused 29 (delta 3), pack-reused 3
+Receiving objects: 100% (47/47), 9.50 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (9/9), done.
+
+******************************************************************************
+*****************************HELP*********************************************
+git help clone
+===============================================================================
+
+Step4
+======
+git clone https://github.com/18414/ansible.git ansible_repo
+
+<------------------------- output ---------------------------------------->
+Cloning into 'ansible_repo'...
+remote: Enumerating objects: 6, done.
+remote: Counting objects: 100% (6/6), done.
+remote: Compressing objects: 100% (4/4), done.
+Unpacking objects: 100% (9/9), done.
+remote: Total 9 (delta 0), reused 0 (delta 0), pack-reused 3
+========================================================================
+
+Step5
+=====
+
+cd /root/ansible/ansible_repo
+
+=================================================================
+[root@ansible ansible_repo]# ls
+
+=================================================================
+step6
+
+# pwd
+
+
+# git status 
+<------------------------- output ---------------------------------------->
+# On branch master
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       README.md
+nothing added to commit but untracked files present (use "git add" to track)
+
+================================================================================
+# git add README.md 
+
+******************** Now our file is in staging **************************
+
+# git status
+
+<------------------------- output ---------------------------------------->
+
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#       new file:   README.md
+
+
+gittest  gittestlatest  README.md
+=================================================================================
+
+******What we have in content***************
+
+
+# Git commit -m "I AM ANSIBLE USER"
+
+<------------------------- output ---------------------------------------->
+[root@ansible ansible_repo]# git commit -m "I AM ANSIBLE USER"
+[master 114afce] I AM ANSIBLE USER
+ Committer: root <root@ansible.us-east1-b.c.static-groove-225809.internal>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+<<<
+
+==================================================================================
+It is actually send the file code to the repository
+*****************************************************
+# git push origin master
+
+<------------------------- output ---------------------------------------->
+Username for 'https://github.com': 18414
+Password for 'https://18414@github.com': 
+Counting objects: 4, done.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 327 bytes | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/18414/ansible.git
+   2e639d9..97415f1  master -> master
+<------------------------- output ---------------------------------------->
+
+======================================================================================
+
+# pwd
+/root/ansible/ansible_repo/.git
+
+# ls
+
+branches  COMMIT_EDITMSG  config  description  HEAD  hooks  index  info  logs  objects  packed-refs  refs
+
+===================================================================================
+
+[root@ansible ansible_repo]# cat README.md
+i love ansible
+i love Docker too
+
+====================================================================================
+# vim index.html
+# ls -lrt
+total 16
+-rw-r--r--. 1 root root  1 Jan 13 01:52 gittestlatest
+-rw-r--r--. 1 root root 20 Jan 13 01:52 gittest
+-rw-r--r--. 1 root root 33 Jan 13 03:07 README.md
+-rw-r--r--. 1 root root 33 Jan 13 03:09 index.html
+[root@ansible ansible_repo]# 
+[root@ansible ansible_repo]# 
+[root@ansible ansible_repo]# git status
+# On branch master
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   README.md
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       index.html
+no changes added to commit (use "git add" and/or "git commit -a")
+
+=====================================================================================
+[root@ansible ansible_repo]# git add index.html 
+[root@ansible ansible_repo]# 
+[root@ansible ansible_repo]# git status
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#       new file:   index.html
+#
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   README.md
+
+=======================================================================================
+If you want check diff between updated file and old
+******************************************************
+[root@ansible ansible_repo]# git diff README.md 
+<------------------------- output ---------------------------------------->
+diff --git a/README.md b/README.md
+index dfcb5e5..c1b074f 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,2 @@
+ i love ansible
++i love Docker too
+=========================================================================================
+# git commit -m "second commit"
+<------------------------- output ---------------------------------------->
+
+[master b750d94] second commit
+ 1 file changed, 5 insertions(+)
+ create mode 100644 index.html
+
+==========================================================================================
+# git log
+<------------------------- output ---------------------------------------->
+
+commit b750d944d9c5a75d4e8129d63420454a90ca3429
+Author: Your Name <you@example.com>
+Date:   Sun Jan 13 03:36:44 2019 +0000
+    second commit
+commit 97415f1788529a3611475825e6a0c5632839a532
+Author: Your Name <you@example.com>
+Date:   Sun Jan 13 02:40:17 2019 +0000
+    I AM ANSIBLE USER
+commit 2e639d9a5371bea4db12bb7ee8128d72be0e4cd4
+Author: 18414 <42921070+18414@users.noreply.github.com>
+Date:   Sat Jan 12 20:50:05 2019 -0500
+    Update gittest
+commit 71f30f520874a3a286b9e1e5f796622efef0183d
+Author: 18414 <42921070+18414@users.noreply.github.com>
+Date:   Sat Jan 12 20:39:54 2019 -0500
+    Rename gittest to gittestlatest
+commit c5f7bfa9d6243f6f1f6d6fc668698781a38ea4c5
+Author: root <root@git.c.calcium-vector-213809.internal>
+Date:   Mon Sep 3 01:38:19 2018 +0000
+    myfirstcommit
+==============================================================================================
+
+Finally we push files to the GITHUB after modified
+****************************************************
+# git push origin master
+
+<------------------------- output ---------------------------------------->
+
+Username for 'https://github.com': 18414
+Password for 'https://18414@github.com': 
+Counting objects: 4, done.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 295 bytes | 0 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/18414/ansible.git
+   97415f1..b750d94  master -> master
+================================================================================================
+
+make some changes and redo again the check status
+
+# git status
+<------------------------- output ---------------------------------------->
+# On branch master
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   README.md
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+###############################################################################################
+
+# vim README.md 
+# cat README.md 
+i love ansible
+i love Docker too
+
+sdfdsf
+************************************* git checkout 
+# git checkout README.md 
+# cat README.md 
+<------------------------- output ---------------------------------------->
+i love ansible
+i love Docker too
+=================================================================
+Following scenaio when we messed up with code and need to rollback then use below solution
+******************************************************************************************************
+
+git checkout 97415f1788529a << take from git log since where you changed
+Note: checking out '97415f1788529a'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at 97415f1... I AM ANSIBLE USER
+
+****************** Now revert to first commit ******************
+# cat README.md 
+<------------------------- output ---------------------------------------->
+ i love ansible
+
+=============================================================
+# git checkout master
+<------------------------- output ---------------------------------------->
+Previous HEAD position was 97415f1... I AM ANSIBLE USER
+Switched to branch 'master'
+
+******** Again it switched to second change below **************
+# cat README.md 
+i love ansible
+i love Docker too
+====================================================================================================
+
+git clone https://github.com/ryandaniels/ansible-role-create-users.git roles/create-users
