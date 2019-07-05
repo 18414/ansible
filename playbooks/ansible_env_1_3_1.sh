@@ -32,6 +32,7 @@ echo -e "`tput setaf 3`\t\t6) Install and configure git `tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t7) Configure Ansible Inventory`tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t8) Add Remote server`tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t9) Install Jenkins`tput sgr0`\n"
+echo -e "`tput setaf 3`\t\t10) Install Python BOTO and AWS CLI `tput sgr0`\n"
 echo -e "`tput setaf 3`\t\t0) Exit`tput sgr0`\n"
 }
 
@@ -205,6 +206,19 @@ jenkins_install()
   clear
 }
 
+py_boto()
+{
+
+yum install -y python-pip* 
+
+pip install --upgrade pip
+pip install boto
+pip install boto3
+
+pip install awscli==1.15.83
+
+
+}
 
 #######################################################################################
 ### get username and use as Global variable 
@@ -242,6 +256,8 @@ case "$action" in
 8)remote_srv;;
 
 9)jenkins_install;;
+
+10)py_boto;;
 
 0)exit;;
 
