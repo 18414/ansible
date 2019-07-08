@@ -1,0 +1,46 @@
+---
+- name: Provision VPC 
+  hosts: localhost
+  become: true
+  vars: 
+    my_region: us-east-2
+  tasks: 
+    - name: Create VPC
+        ec2_vpc_net: 
+          name: "Analytics"
+          state: present
+          cidr_block: 10.0.0.0/16
+          region: "{{ my_region }}"
+        register: vpc
+
+    - name: Create subnet and associate 
+      ec2_vpc_subnets: 
+        state: present
+        vpc_id: "{{ vpc_id }}"
+        cidr: 10.0.1.0/28
+        resource_tags: { "Environment" : "private-subnet" }
+
+    - name: create IGW
+      ec2_vpc_igw:
+      vpc_id: "{{ vpc_id }}"
+      region: "{{ my_region }}"
+      state: present
+      tags: 
+        name: "{{ my-igw }}"
+      register: igw
+      
+    
+- name: Provision EC2 instance
+  hosts: localhost
+  connection: local
+  become: true
+  tasks: 
+    name: Launch the new ec2 instance
+    ec2: 
+      instance_type: t2.micro
+      key_name: aws_final
+      image: ami-0f2b4fc905b0bd1f1
+      user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"
+      region: "{{ my_region }}"
+      group: Newsc
+      vpc_subnet_id: vpc.
