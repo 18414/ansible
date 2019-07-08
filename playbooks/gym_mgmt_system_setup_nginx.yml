@@ -17,7 +17,8 @@
           user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"
           region: us-east-2
           group: Newsc
-          vpc_subnet_id: subnet-052af449
+#          vpc_subnet_id: subnet-052af449
+          vpc_subnet_id: subnet-0d79430f266ac41a9
           assign_public_ip: yes
           wait: yes
           count_tag:

@@ -1,0 +1,27 @@
+---
+- name: Provision VPC 
+  hosts: localhost
+  become: true
+  tasks: 
+    ec2_vpc: 
+      state: present
+      cidr_block: 10.0.0.0/16
+      resource_tags: { "Environment": "Analytics" }
+      region: us-east-2
+      subnets: 
+        - cidr: 10.0.1.0/28
+          az: us-east-2a
+          resource_tags: { "Environment" : "private-subnet" }
+      internet_gateway: true
+      route_tables: 
+        - subnets: 
+            - 10.0.1.0/28
+
+- name: Provision EC2 instance
+  hosts: localhost
+  connection: local
+  become: true
+  tasks: 
+    name: Launch the new ec2 instance
+    ec2: 
+      instance_type: t2.micro
