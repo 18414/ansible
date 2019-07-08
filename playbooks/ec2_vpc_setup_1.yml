@@ -50,14 +50,20 @@
             cidr_ip: 0.0.0.0/0
       register: security_group
      
-   # - name: SG OUT 
-  #    debug: 
- #       msg: "{{ security_group.group_id  | regex_replace('^\\"|\\"$', '') }}"
-#      register: sg
+    - name: SG OUT 
+      debug: 
+        msg: "{{ security_group.group_id | regex_replace('"', '\"') }"
+      register: sgs
  
-    - name: Capture SG ID
-      command: 'echo "{{ security_group.group_id }}" | tr -d '"''
-      register: sg
+  #  - name: Capture SG ID
+ #     command: echo '{{ security_group.group_id }}'| sed 's/\"//g'
+     # command: echo '{{ security_group.group_id }}'
+#      register: sgs
+
+    - name: SG OUT
+      debug:
+        msg: "{{ sgs }}"
+  
     
     - name: Launch the new ec2 instance
       ec2: 
@@ -66,8 +72,8 @@
         image: ami-0f2b4fc905b0bd1f1
         user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"
         region: "{{ my_region }}"
-        #group: "{{ security_group.group_id }}"
-        group: "{{ sg.stdout }}"
+   #     group: "{{ security_group.group_id }}"
+        group: "{{ sgs }}"
         vpc_subnet_id: "{{ sub.subnet.id }}"
         count_tag: 
           application: ElastickSearch-cluster-{{ item }}
