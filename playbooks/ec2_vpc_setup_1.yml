@@ -50,26 +50,6 @@
             cidr_ip: 0.0.0.0/0
       register: security_group
      
-   # - name: SG OUT 
-  #    debug: 
- #       msg: "{{ security_group.group_id | regex_replace('"', '\"') }"
-#      register: sgs
-
-    - local_action: copy content={{ security_group.group_id }} dest=/tmp/grp_id.txt
-      register: sgs
- 
-    - name: Print the file
-      command:  sed -i 's/\"//g' /tmp/grp_id.txt
-      register: sgfile
-  #  - name: Capture SG ID
- #     command: echo '{{ security_group.group_id }}'| sed 's/\"//g'
-     # command: echo '{{ security_group.group_id }}'
-#      register: sgs
-
-    - name: SG OUT
-      debug:
-        msg: "{{ sgfile.stdout }}"
-  
     
     - name: Launch the new ec2 instance
       ec2: 
@@ -78,12 +58,11 @@
         image: ami-0f2b4fc905b0bd1f1
         user_data: "{{ lookup('file', '/home/ansible/ansible/playbooks/ans_env.sh')}}"
         region: "{{ my_region }}"
-        #group: "{{ security_group.group_id }}"
-        group: "{{ sgfile.stdout }}"
+        group_id: "{{ security_group.group_id }}"
         vpc_subnet_id: "{{ sub.subnet.id }}"
         count_tag: 
           application: ElastickSearch-cluster-{{ item }}
-        exact_count: 3
+        exact_count: 1
       register: ec2
       with_items: 
         - master
@@ -106,16 +85,16 @@
                     state=started
       with_items: "{{ ec2.instances }}"
 
-    - name: Add tag to Instance(s)
-      local_action: ec2_tag resource={{ item.id }} region=us-east-2 state=present
-      with_items: "{{ ec2.instances }}"
-      args:
-        tags:
-          Name:  ElastickSearch-cluster{{ item }}
-      with_items: 
-        - master
-        - client
-        - data
+#    - name: Add tag to Instance(s)
+#      local_action: ec2_tag resource={{ item.id }} region=us-east-2 state=present
+   #   with_items: "{{ ec2.instances }}"
+  #    args:
+ #       tags:
+  #        Name:  ElastickSearch-cluster{{ item }}
+ #     with_items: 
+      #  - master
+      #  - client
+      #  - data
     - name: make known host entry
       shell: ssh-keyscan {{ item.public_ip }} >> /home/ansible/.ssh/known_hosts
       with_items: "{{ ec2.instances }}"
