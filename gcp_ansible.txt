@@ -1,0 +1,5 @@
+#https://matthewdavis.io/use-ansible-to-automate-google-cloud-platform/
+yum install apache-libcloud
+
+create a key from google cloud service account and copy on ansible server and mention path
+
