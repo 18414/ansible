@@ -1,8 +1,7 @@
 #!/bin/bash
  useradd ansible
  mkdir -p /home/ansible/.ssh
-     echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9YEQrp/XO2GEr5DfaJPsr+G4qFYO1+JSwqRZxZNfT4dz+Yj7tRShOEX6XM3ieLsGZQxCbXqp3GDah+6uZwnBBuvuTrzWh0ynb9r1rBzAM/g3VQ1iyzWlsU5FOPOMvs5WaKPgfT5/CexAlUHhM4H4IMWi7kVVAVQaKJrNyqoCUtlEwNweXqUpNNzI3KfzZxHAy64X+kzg0i7XmSeJvH4FMmC0+rT5kNs/DJes8KpVkIbqwx/LPUjUU2M5c4JvxNdkgPiEn28ooaSbLjgJIGMcJUuMoOYn8/rY3v0QCnUl2xsE5gXbdAXkqmyT6gRwBoTIPEZC8TYr2RHP5qsULt9n7 ansible@ip-172-31-1-128.us-east-2.compute.internal
-" > /home/ansible/.ssh/authorized_keys
+     echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4mN7XiPFpNIRUG5pD1alFuOAyWRV9YvgovAVNZsg0twb0FF9ImW40YFHwXIxitBaVq7pnOJYIYJlYsbgJ0w/4KO2HNXgatNBfoEQxXXsrexYNLiPW9yLS9bMYg/7EtgfM6KHo3WwoO6HYVoopsQuMbf96wmRGup/zZHYnK3rm1BJbFMKlbTL3Ie4vut2qyeQUVhJ3jM9wGjMOccdw/DlWoffOCpJTyrxoF4YJdbjP0CkzmysbxM3qOe4q+7oF6CpC/MV9VwVJCERXy6JQs/m8HfiYhRqLPwcFAmSc29T8keJ6uzJ5hcFb0okZGYIDw2mZnvCgy3fXFUv6mwVXauH7 ansible@ip-172-31-1-205.us-east-2.compute.internal" > /home/ansible/.ssh/authorized_keys
  chmod 700 /home/ansible/.ssh
  chmod 600 /home/ansible/.ssh/authorized_keys
  chown -R ansible.ansible /home/ansible/.ssh/authorized_keys

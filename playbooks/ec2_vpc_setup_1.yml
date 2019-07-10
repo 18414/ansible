@@ -13,16 +13,19 @@
         region: "{{ my_region }}"
       register: myvpc
 
+    - debug: msg={{ myvpc }}
+
     - name: Create subnet and associate 
       ec2_vpc_subnet: 
         state: present
         vpc_id: "{{ myvpc.vpc.id }}"
         cidr: 10.0.1.0/28
-        #map_public: yes
+        map_public: yes
         resource_tags: 
           Name: privatesubnet
       register: sub
-       
+    
+    - debug: msg={{ sub }} 
 
     - name: create IGW
       ec2_vpc_igw:
@@ -32,6 +35,8 @@
         tags: 
           Name: "Myigw"
       register: igw
+
+    - debug: msg={{ igw }}
 
     - name: Create Router
       ec2_vpc_route_table:
