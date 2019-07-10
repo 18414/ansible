@@ -18,7 +18,7 @@
         state: present
         vpc_id: "{{ myvpc.vpc.id }}"
         cidr: 10.0.1.0/28
-        map_public: yes
+        #map_public: yes
         resource_tags: 
           Name: privatesubnet
       register: sub
@@ -33,6 +33,18 @@
           Name: "Myigw"
       register: igw
 
+    - name: Create Router
+      ec2_vpc_route_table:
+        vpc_id: "{{ myvpc.vpc.id }}"
+        region: "{{ my_region }}"
+        subnets:
+          - "{{ sub.subnet.id }}"
+        routes: 
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw.gateway_id }}"
+        tags: 
+          Name: my-router
+        
 
     - name: Create Security Group
       ec2_group:
@@ -63,7 +75,7 @@
         vpc_subnet_id: "{{ sub.subnet.id }}"
         assign_public_ip: yes
         count_tag: 
-          Name: ElastickSearch-cluster
+          application: ElastickSearch-cluster
         exact_count: 3
       register: ec2
 
