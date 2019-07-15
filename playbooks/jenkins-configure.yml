@@ -1,0 +1,50 @@
+---
+# tasks file for jenkins-bm
+- name: Install wget
+  yum:
+    name: wget
+    state: present
+
+- name: Install  JDK
+  yum:
+    name: java-1.8.0
+    state: present
+
+- name: Download jenkins repo
+  get_url:
+    url: http://pkg.jenkins-ci.org/redhat-statble/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: Import Jenkins Key
+  rpm_key:
+    state: present
+    key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+- name: Install Jenkins
+  yum:
+    name: jenkins
+    state: present
+
+- name: start Jenkins
+  systemd:
+    name: jenkins
+    state: started
+
+- name: Enabled Jenkins
+  systemd:
+    name: jenkins
+    enabled: true
+
+- name: sleep 30 seconds and continue with play
+  wait_for: timeout=30
+  delegate_to: localhost
+
+- name: init password jenkins
+  shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+  changed_when: false
+  register: result
+
+- name: Use below password onetime password for login
+  debug:
+    var: result.stdout
+
