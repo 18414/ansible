@@ -1,6 +1,6 @@
 ---
 # tasks file for jenkins-bm
-- hosts: locahost
+- hosts: localhost
   become: true
   tasks: 
     - name: Install wget
@@ -15,7 +15,8 @@
 
     - name: Download jenkins repo
       get_url:
-        url: http://pkg.jenkins-ci.org/redhat-statble/jenkins.repo
+        #url: http://pkg.jenkins-ci.org/redhat-statble/jenkins.repo
+        url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
         dest: /etc/yum.repos.d/jenkins.repo
 
     - name: Import Jenkins Key
