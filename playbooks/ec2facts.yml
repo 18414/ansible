@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: get info
+      ec2_instance_facts: 
+    - name: Conditional
+      debug: 
+        msg: "This is ec2_facts test"
+      when: ansible_ec2_instance_type == "t2.micro"

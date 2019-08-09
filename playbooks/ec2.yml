@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: create ec2
+      ec2: 
+        region: us-east-2
+        instance_type: t2.micro
+        state: present
+        key_name: aws_final
+        vpc_subnet_id: subnet-0d79430f266ac41a9
+        image: ami-0f2b4fc905b0bd1f1
+        assign_public_ip: yes    
+        instance_tags: 
+          Name: WEB
+      register: ec2
+
+
+    - name: Attache volume 
+      ec2_vol:
+        instance: "{{ ec2.instance_id }}" 
+        name: myvol
+        state: present
+        volume_size: 5
+        device_name: sdd
+        state: present
+    

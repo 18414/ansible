@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  become: true
+  vars: 
+    users: 
+    - username: "Reyansh"
+      groups: "admin,wheel"
+    - username: "Bhushan"         
+      groups: "admin,wheel"
+    - username: "Mahajan"
+      groups: "admin,wheel"
+     
+  tasks:  
+    - name: crete admin group
+      group: 
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - admin
+        - wheel
+
+    - name: Create user accounts
+      user: 
+        name: "{{ item.username }}"
+        groups: "{{ item.groups }}"
+      with_items: "{{ users }}"
+
+    - name: "Add authorized keys"
+      authorized_key: 
+        user: "{{ item.username }}"
+        key: "{{ lookup('file', 'files/'+ item.username + '.key.pub') }}"
+      with_items: "{{ users }}"

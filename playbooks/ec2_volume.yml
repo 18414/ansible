@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: create ec2
+      ec2_vol: 
+        instance: i-0778e8c2570fca4f7
+        vpc_subnet_id: subnet-0d79430f266ac41a9
+        region: us-east-2
+        state: present
+        volume_size: 5
+        device_name: sdd
+        state: present
+
+    
