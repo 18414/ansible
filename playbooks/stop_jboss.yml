@@ -1,0 +1,29 @@
+---
+# tasks file for Jboss shutdown
+# - set_fact:
+#     awk_command: "/bin/awk '{ print $1 }'"
+#
+#     - set_fact:
+#         find_command: "ps -e | grep java | grep -v grep | {{ awk_command }}"
+#
+#         - name: "Find JBoss PID"
+#           command: /bin/bash -i -c "{{ find_command }}"
+#             register: jboss_pid
+#
+#             - name: "JBoss PID"
+#               debug: 'msg="JBoss PID is {{jboss_pid.stdout}}"'
+#                 when: jboss_pid.stdout != ""
+#
+#                 - name: "JBoss PID"
+#                   debug: 'msg="JBoss is not running"'
+#                     when: jboss_pid.stdout == ""
+#
+#                     - name: "Stop JBoss"
+#                       command: "/bin/bash -i -c 'kill {{jboss_pid.stdout}}'"
+#                         when: jboss_pid.stdout != ""
+#
+#                         - name: "Wait for JBoss to Shutdown"
+#                           wait_for:
+#                               path: "/proc/{{jboss_pid.stdout}}/status"
+#                                   state: absent      
+#                                     when: jboss_pid.stdout != ""
