@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Create directory
+      file: 
+        path: /opt/gradle
+        state: directory
+
+    - name: Download gradle 
+      get_url: 
+        url: https://services.gradle.org/distributions/gradle-3.4.1-bin.zip
+        dest: /opt/
+
+    - name: Extract gradle 
+      unarchive: 
+        src: /opt/gradle-3.4.1-bin.zip 
+        dest: /opt/
+        remote_src: yes
+ 
+    - name: Set ENV
+      command: "export PATH=$PATH:/opt/gradle-3.4.1/bin >> /etc/profile"
