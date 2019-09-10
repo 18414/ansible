@@ -1,0 +1,15 @@
+---
+- hosts: ec2
+  gather_facts: no
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks:
+    - name: launching ec2
+      ec2_ami:  
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        instance_id: i-0b39690d6838ba242
+        name: MyNewAMI
+        image_id: ami-09e4e12f1eb94a91b
+        state: absent
