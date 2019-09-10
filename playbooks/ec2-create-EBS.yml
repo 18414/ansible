@@ -1,0 +1,21 @@
+---
+- hosts: ec2
+  gather_facts: no
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks:
+    - name: Create nwe EBS volume  
+      ec2_vol:  
+        name: "CPU-low"
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        zone: us-east-1a
+        volume_size: "1" 
+        name: web_volume
+        device_name: /dev/xvdf
+      register: vol_info
+    - debug: 
+        var: vol_info
+    
+
