@@ -9,9 +9,7 @@
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
-        #region: us-east-1
         instance_type: t2.micro
-#       image: ami-098bb5d92c88886ca1 #RHEL8
         image: ami-0b69ea66ff7391e80 
         assign_public_ip: yes
         vpc_subnet_id: subnet-5f0cf112
@@ -20,12 +18,12 @@
         wait: true
         exact_count: 1
         count_tag: 
-          Name: Demo
+          Name: Demo1
         instance_tags: 
-          Name: Demo
+          Name: Demo1
       register: ec2
-#    - debug: 
- #       var: ec2
+    - debug: 
+        var: ec2
    
       
     - name: Add host to inventory 
@@ -47,4 +45,4 @@
   
     - name: check host status
       ping: 
-    
+ 
