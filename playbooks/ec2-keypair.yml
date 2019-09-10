@@ -1,0 +1,29 @@
+---
+- hosts: ec2
+  gather_facts: no
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks:
+    - name: Remove old key
+      ec2_key:  
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        name: myasgkey
+        state: absent
+
+    - name: Create new ec2 keypair 
+      ec2_key: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        name: ganesha_nv
+      register: keypair
+    - debug: 
+        var: keypair
+    - name: write new private key to file locally
+      lineinfile: 
+        create: yes
+        path: /home/ansible/my_keypair.pem
+        line: "{{ keypair.key.private_key }}"
+        mode: 0600
