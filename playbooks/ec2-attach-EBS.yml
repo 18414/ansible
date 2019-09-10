@@ -4,17 +4,11 @@
   vars_files: 
     - /home/ansible/ansible/playbooks/keys.yml
   tasks:
-    - name: Create nwe EBS volume  
-      ec2_vol:  
+    - name: Attache EBS volume  
+      ec2_vol: 
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
-        zone: us-east-1c
-        volume_size: "1" 
-        name: web_volume1
-        device_name: /dev/xvdf
-      register: vol_info
-    - debug: 
-        var: vol_info
-    
-
+        instance: i-06d538d72ea1fdd82 
+        id: vol-071f98cea98596648 
+        delete_on_termination: yes
