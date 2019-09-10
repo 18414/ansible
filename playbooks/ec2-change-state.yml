@@ -1,0 +1,17 @@
+---
+- name: ec2 launcher
+  hosts: localhost
+  connection: local
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks:
+    - name: launching ec2
+      ec2: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        instance_id: i-0d4791aa6bab34486
+        state: absent
+#        instance_tags: 
+ #         Name: Demo1
+    
