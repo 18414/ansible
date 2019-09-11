@@ -1,0 +1,28 @@
+---
+- name: Create security group 
+  hosts: localhost
+  connection: local
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks:
+    - name: Get Subnet ID from existing server 
+      ec2_group: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        region: "{{ AWS_REGION }}"
+        name: demoSG
+        description: An example EC2 security group
+        vpc_id: vpc-ae7e07d4
+        rules: 
+          - proto: tcp
+            ports: 
+              - 80
+              - 443
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            to_port: 22
+            cidr_ip: 86.75.30.9/32
+        rules_egress:
+          - proto: tcp
+            from_port: 22
+            cidr_ip: 10.0.0.0/8
