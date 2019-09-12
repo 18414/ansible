@@ -1,0 +1,17 @@
+---
+- name: Create security group 
+  hosts: localhost
+  connection: local
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks:
+    - name: Get Subnet ID from existing server 
+      ec2_vpc_net: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        region: "{{ AWS_REGION }}"
+        name: demoVPC
+        cidr_block: 10.0.0.0/16
+        tags: 
+          client: LA
+        tenancy: dedicated

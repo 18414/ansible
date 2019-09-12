@@ -1,0 +1,50 @@
+- hosts: localhost
+gather_facts: no
+vars_files:
+  - /home/ansible/keys.yml
+tasks:
+  - name: Get VPC facts
+    ec2_vpc_net_facts:
+      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      region: "{{ AWS_REGION }}"
+    register: vpc_facts
+  - name: Add line to facts.txt
+    lineinfile:
+      path: /home/ansible/facts.txt
+      line: "VPC ID: {{ vpc_facts.vpcs[0].vpc_id }}"
+
+  - name: Get VPC Subnet Facts
+    ec2_vpc_subnet_facts:
+      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      region: "{{ AWS_REGION }}"
+      filters:
+        vpc-id: "{{ vpc_facts.vpcs[0].vpc_id }}"
+    register: subnet_facts
+  - name: Add line to facts.txt
+    lineinfile:
+      path: /home/ansible/facts.txt
+      line: "Subnet ID: {{ subnet_facts.subnets[0].subnet_id }}"
+
+  - name: Get EC2 instance facts
+    ec2_instance_facts:
+      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      region: "{{ AWS_REGION }}"
+      filters:
+        tag:Name: "Leo"
+    register: ec2_facts
+
+  - name: Get Security Group facts
+    ec2_group_facts:
+      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      region: "{{ AWS_REGION }}"
+      filters:
+        group-id: "{{ ec2_facts.instances[0].security_groups[0].group_id }}"
+    register: security_group_facts
+  - name: Add line to facts.txt
+    lineinfile:
+      path: /home/ansible/facts.txt
+      line: "Security Group Rule Set: {{ security_group_facts.security_groups[0].ip_permissions }}"
