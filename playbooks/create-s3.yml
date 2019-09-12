@@ -1,0 +1,22 @@
+- hosts: localhost
+  become: yes
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks: 
+    - name: Create new S3 bucket 
+      aws_s3: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        bucket: la-anible-s3-provision
+        mode: create
+    - name: Add file to bucket
+      aws_s3: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        bucket: la-anible-s3-provision
+        mode: put
+        object: keys.yml
+        src: /home/ansible/ansible/playbooks/keys.yml
+      
