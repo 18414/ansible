@@ -1,0 +1,27 @@
+- hosts: localhost
+  become: yes
+  vars_files: 
+    - /home/ansible/ansible/playbooks/keys.yml
+  tasks: 
+    - name: Create new IAM user 
+      iam: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        iam_type: user
+        state: present
+        name: demouser
+        password: temp@123demo
+    - name: Create new group with policy and add user
+      iam_group:  
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        name: testgroup
+        managed_policy: 
+          - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess 
+        users:
+          - demouser
+        state: present
+     
+        
