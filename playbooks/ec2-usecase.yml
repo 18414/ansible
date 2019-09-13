@@ -6,8 +6,8 @@
     - /home/ansible/ansible/playbooks/keys.yml
   vars: 
     DEFAULT_VPC_SUBNET: subnet-0bae8625
-    BASE_AMI: ami-098bb5d928886ca1 # RHEL8
-    AWS_ZONE: us-east-1d
+    BASE_AMI: ami-0b69ea66ff7391e80 # AWS AMI
+    AWS_ZONE: us-east-1b
   tasks: 
     - name: Crate new EBS volume
       ec2_vol: 
@@ -38,15 +38,16 @@
         image: "{{ BASE_AMI }}"
         assign_public_ip: yes
         vpc_subnet_id: "{{ DEFAULT_VPC_SUBNET }}"
+        group: ASGSG
         wait: true
         count: 1
         instance_tags: 
           Name: web-server
           image: yes
-        register: ec2
+      register: ec2
 
-     - name: Attach volume
-       ec2_vol: 
+    - name: Attach volume
+      ec2_vol: 
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
@@ -55,22 +56,28 @@
         device_name: /dev/xvdf
         delete_on_termination: no
 
-     - name: Add host to Ansible inventory
-       add_host: 
-         hostname: "{{ item.public_ip }}"
-         groupname: webgroup
-         ansible_ssh_common_args: "-o StrictHostkeyChecking=no"
-       loop: "{{ ec2.instances }}"
+    - name: Add host to Ansible inventory
+      add_host: 
+        hostname: "{{ item.public_ip }}"
+        groupname: webgroup
+        ansible_ssh_common_args: "-o StrictHostkeyChecking=no"
+      loop: "{{ ec2.instances }}"
        
 - hosts: webgroup
   gather_facts: no
-  remote_user: ec2-user
+  remote_user: ansible
+  become: yes
   tasks: 
     - name: Wait for SSH to come  up
-      wait_for_connetion: 
+      wait_for_connection: 
         delay: 5
         timeout: 90
 
+    - name: Create ansible user
+      user: 
+        name: ansible 
+        state: present
+ 
     - name: create new partition 
       become: yes
       parted: 
