@@ -65,7 +65,7 @@
        
 - hosts: webgroup
   gather_facts: no
-  remote_user: ansible
+  remote_user: ec2-user
   become: yes
   tasks: 
     - name: Wait for SSH to come  up
@@ -104,6 +104,11 @@
       yum: 
         name: httpd
         state: latest
+
+    - name: Start httpd service
+      service: 
+        name: httpd
+        state: started
   
     - name: collect base Ansible facts    
       ec2_metadata_facts: 
@@ -114,19 +119,19 @@
   vars_files: 
     - /home/ansible/ansible/playbooks/keys.yml
   tasks: 
-    - name: Check out volumes 
-      debug: 
-        msg: "{{ item.device }} is mounted on {{ item.mount }}" 
-      loop: "{{ hostvars[groups[ 'webgroup' ][0][ 'ansible_mounts'] }}"
-      loop_control: 
-        label: "{{ item.device }}"
+    #- name: Check out volumes 
+    #  debug: 
+    #    msg: "{{ item.device }} is mounted on {{ item.mount }}." 
+    #  loop: "{{ hostvars[groups['webgroup'][0]]['ansible_mounts'] }}"
+    #  loop_control: 
+    #    label: "{{ item.device }}"
 
     - name: Stop instance for AMI creation
       ec2: 
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
-        instance_id: "{{ hostvars[groups['webgroup'][0][ 'ansible_ec2_instance_id' ] }}"
+        instance_id: "{{ hostvars[groups['webgroup'][0]]['ansible_ec2_instance_id'] }}"
         state: stopped
         wait: yes
 
@@ -135,7 +140,7 @@
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
-        instance_id: "{{ hostvars[groups['webgroup'][0][ 'ansible_ec2_instance_id' ] }}"
+        instance_id: "{{ hostvars[groups['webgroup'][0]]['ansible_ec2_instance_id'] }}"
         name: webcontent
         state: present
         
