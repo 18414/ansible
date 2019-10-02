@@ -1,0 +1,10 @@
+---
+- hosts: local
+  become: true
+  tasks:
+    - name: Create file 
+      file: 
+        path: /tmp/file1
+        state: touch
+      register: output
+    - debug: msg="Resgiter output is {{ output }}"

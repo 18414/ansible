@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+  tasks: 
+    - name: create file
+      file: 
+        path: /tmp/newfile
+        state: touch 
+
+    - name: Create user
+      user: 
+        name: bhushan 
+        #owner: bhushan
+        #group: admin 
+      register: output
+
+    - debug: msg=Register output is {{ output }}
+   
+    - name: Edit file 
+      lineinfile: 
+        path: /tmp/newfile
+        line: "{{ output.home }}"
+    
+  
+       
+

@@ -1,0 +1,14 @@
+---
+- hosts: local
+  become: yes
+  tasks: 
+  - name: get file
+    block: 
+    - name: download 
+      get_url: 
+        url: "http://apache/index.html"
+        dest: "/tmp/index.html"
+      rescue: 
+        - debug: msg="File does not exist"
+      always: 
+        - debug: msg="Play done!"

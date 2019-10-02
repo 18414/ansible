@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+    - name: Download file from web server
+      get_url: 
+        url: http://35.196.198.21/index.html
+        dest: /tmp
+      ignore_errors: yes
+
+    - name: Copy files to apache server
+      file: 
+        state: touch 
+        path: /tmp/error
+        
