@@ -1,5 +1,5 @@
 ---
-- hosts: apache
+- hosts: all
   sudo: yes
   gather_facts: no
   user: ansible

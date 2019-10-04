@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: yes
+ # serial: 1
+  tasks:
+    - name: create  user
+      user:
+        name: bhushan
+        state: present
+        groups: wheel
+      run_once: true
+    - name: Create file
+      file: 
+        state: directory
+        path: /home/ansible/runonce
+    - name: PIng remote server 
+      local_action: command ping -c 2

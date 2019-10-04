@@ -9,6 +9,6 @@
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
-        instance_id: i-0b39690d6838ba242
+        instance_id: i-0d9f14116d1b3466f 
         name: MyNewAMI
         state: present

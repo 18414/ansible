@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+    - name: install httpd on localhost
+      local_action: yum 
+                    name=httpd 
+                    state=present
+    - name: Install tree package on WEB server
+      yum: name=tree state=present
+      delegate_to: 54.152.112.209
+    
+    

@@ -1,5 +1,5 @@
 --- # The pause module
-- hosts: apache
+- hosts: all
   sudo: yes
   user: ansible
   connection: ssh
@@ -10,7 +10,7 @@
   - name: Pausing
     pause:
       seconds: 3
-#      prompt: "Make sure the installation is complte...#"
+      prompt: "Make sure the installation is complte...#"
   - name: Verify lynx installation
-    action: yum name=lynx state=present
+    yum: name=lynx state=present
 
