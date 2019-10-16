@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files: 
+    - keys.yml
+  vars: 
+    default_vpc_subnet: subnet-8b371aec
+    aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+    aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+    ec2_region: "{{ AWS_REGION }}"
+    zone: "{{ AWS_ZONE }}"
+    volume_size: "1"  
+    name: web_volume
+    device_name: /dev/xvdf
+  register: vol_info
+
+- name: Create AWS key paid using Ansible key
+  ec2_key: 
+    aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+    aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+    ec2_region: "{{ AWS_REGION }}"
+    name: ansible_key
+    key_material: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+    
+- name: Provision: Instance
+  ec2: 
+  
+    
