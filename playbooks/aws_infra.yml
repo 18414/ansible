@@ -9,35 +9,36 @@
   vars: 
     default_vpc_subnet: subnet-8b371aec
     BASE_AMI: ami-098bb5d92c8886ca1
-    AWS_ZONE: us-east-1d
+    AWS_ZONE: us-east-1a
   tasks: 
     - name: Create new EBS volume
       ec2_vol: 
-        aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
         zone: "{{ AWS_ZONE }}"
         volume_size: "1"  
         name: web_volume
         device_name: /dev/xvdf
-     register: vol_info
+      register: vol_info
 
     - name: Create AWS key paid using Ansible key
       ec2_key: 
-        aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
         name: ansible_key
         key_material: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
     
-    - name: Provision: Instance
+    - name: Provision Instance
       ec2: 
-        aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
         instance_type: t2.micro
         keypair: ansible_key  
         image: "{{ BASE_AMI }}"
+        zone: "{{ AWS_ZONE }}"
         assign_public_ip: yes
         vpc_subnet_id: "{{ default_vpc_subnet }}"
         wait: true   
@@ -48,14 +49,16 @@
       register: ec2
 
     - name: Attache volume
-      ec2-vol: 
-        aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+      ec2_vol: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
-        ec2_region: "{{ AWS_REGION }}"
+        ec2_region: "{{ AWS_REGION }}"  
+        zone: "{{ AWS_ZONE }}"
         instance: "{{ ec2.instances[0].id }}"
         id: "{{ vol_info.volume_id }}"
         device_name: /dev/xvdf
         delete_on_termination: no
+
     - name: Add host to inventory
       add_host: 
         hostname: "{{ item.public_ip }}"
@@ -122,7 +125,7 @@
 
     - name: Stop instance for AMI creation
       ec2: 
-        aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
         instance_id: "{{ hostvars[groups['webgroup'][0]]['ansible_ec2_instance_id'] }}"
@@ -131,7 +134,7 @@
 
     - name: Create AMI
       ec2_ami: 
-        aws_acces_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
         instance_id: "{{ hostvars[groups['webgroup'][0]]['ansible_ec2_instance_id'] }}"
