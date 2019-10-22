@@ -1,0 +1,12 @@
+---
+# vars file for aws-infra-provision
+#
+#default_vpc_subnet: subnet-8b371aec # us-east-1a
+default_vpc_subnet: subnet-49a88615 # us-east-1d
+#BASE_AMI: ami-0b69ea66ff7391e80 # Amazon Linux
+BASE_AMI: ami-0015b9ef68c77328d # CentOS_7.5_Private - community edition
+AWS_ZONE: us-east-1a
+GRP_NAME: ASGSG
+KEY_NAME: mysg-nvg
+INSTANCE: t2.medium
+#AWS_REGION: us-east-1

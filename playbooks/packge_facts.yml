@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: get the rpm package facts
+      package_facts:
+        manager: "auto"
+
+    - name: show them
+      debug: var=ansible_facts.packages
+
+    - name: Ansible test result
+      debug: 
+        msg: "ANSIBLE NOT found"
+      when: "'Ansible' not in ansible_facts.packages"

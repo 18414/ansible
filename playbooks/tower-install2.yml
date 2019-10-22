@@ -1,0 +1,96 @@
+---
+- name: Install  Ansible Tower 
+  hosts: tower 
+  become: true
+  tasks: 
+    - name: Download ansible tower
+      get_url:
+        url: https://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-latest.el{{ ansible_distribution_major_version }}.tar.gz
+        dest: /opt
+      register: urlt
+      tags: down
+
+    - debug: msg={{ urlt }}
+
+    - name: extract the file
+      unarchive:
+        src: /opt/ansible-tower-setup-bundle-latest.el{{ ansible_distribution_major_version }}.tar.gz
+        dest: /opt
+        remote_src: yes
+      register: extr
+      tags: ex
+
+    - name: Setup inventory
+      replace:
+        path: /opt/ansible-tower-setup-bundle-3.5.3-1.el{{ ansible_distribution_major_version }}/inventory
+        regexp: "admin_password=''"
+        replace: "admin_password='ganesha'"
+        backup: yes
+      register: invv
+      tags: reg1
+
+
+    - name: Setup inventory
+      replace:
+        path: /opt/ansible-tower-setup-bundle-3.5.3-1.el{{ ansible_distribution_major_version }}/inventory
+        regexp: "pg_password=''"
+        replace: "pg_password='ganesha'"
+        backup: yes
+      register: invv
+      tags: reg2
+
+    - name: Setup inventory
+      replace:
+        path: /opt/ansible-tower-setup-bundle-3.5.3-1.el{{ ansible_distribution_major_version }}/inventory
+        regexp: "rabbitmq_password=''"
+        replace: "rabbitmq_password='ganesha'"
+        backup: yes
+      register: reg
+      tags: reg3
+
+    - name: Bring setup script from tower
+      fetch:
+        src: /opt/ansible-tower-setup-bundle-3.5.3-1.el{{ ansible_distribution_major_version }}/setup.sh
+        dest: /home/ansible/
+        flat: yes
+      register: ff
+      tags: f
+
+    - local_action:
+        module: file
+        path: /home/ansible/setup.sh
+        mode: 0777
+      tags: mod
+
+    - debug: msg={{ ff }}
+
+    - name: Check if ansible install or not before installing TOWER
+      package_facts:
+        manager: "auto"
+
+   # - name: show them
+   #   debug: var=ansible_facts.packages
+
+    - name: Ansible test result
+      yum:
+        name: ansible
+        state: latest
+      when: "'Ansible' not in ansible_facts.packages"
+
+
+    - name: Start Tower installation
+      script: /home/ansible/setup.sh #ansible-tower-setup-bundle-3.5.3-1.el{{ ansible_distribution_major_version }}/setup.sh
+      tags: t
+
+    - name: Tower installation status
+      uri:
+        url: https://{{ item }}
+        return_content: yes
+        status_code: 200
+        register: url_stat
+      tags: link
+
+    - name: URL status # If it returns status code 200
+      debug: msg={{ url_stat }}
+
+
