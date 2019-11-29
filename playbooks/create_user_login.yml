@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  become: true
+  vars: 
+    ext_pass: "{{ pass }}" 
+    name: "{{ usern }}"
+  tasks: 
+    - name: Encrypt password 
+      shell: echo Tecmint-is-a-Linux-Community | openssl enc -aes-256-cbc -a -salt -pass pass:{{ ext_pass }}
+      #shell: echo "{{ ext_pass }}" | openssl passwd -crypt -stdin
+      register: newpass
+ 
+  #set_fact:
+    #my_pass: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+    #encrypt_pas: echo "{{ pass }}" | openssl passwd -crypt -stdin
+ 
+   
+    - debug: msg={{ newpass.stdout }}
+
+    - name: Create user and login
+      user: 
+        name: "{{ name }}"   
+        state: present
+        password: "{{ newpass }}"
+       #update_password: on_create
+      register: p
+
+    - debug: msg={{ p }}

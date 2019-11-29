@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  become: true
+  name: Create user
+  vars_prompt: 
+    - name: "user_password"
+      prompt: "Enter a password for the user"
+      private: yes
+      encrypt: "md5_crypt"
+      confirm: yes
+      salt_size: 7
+  tasks:    
+    - name: create user
+      user: 
+        name: anup
+        password: "{{ user_password }}"
+        
+      

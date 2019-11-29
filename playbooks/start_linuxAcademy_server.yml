@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Start instance on linux academy server
+      uri: 
+        url: https://app.linuxacademy.com/dashboard 
+        user: archanah08 #bmahajan@travelclick.com
+        password: Shivak786 #Abhinandan@18414#
+        method: GET
+        force_basic_auth: yes
+        status_code: 200    
+        return_content: yes
+      register: stat
+      
+    - debug: msg={{ stat }}
+  
+    - name: Fail if offered is not the page content
+      fail: 
+      when: "'offered' not in stat.content"
+      

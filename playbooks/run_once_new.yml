@@ -1,0 +1,11 @@
+---
+- hosts: web
+  become: true
+  tasks: 
+    - name: Install apache 
+      yum: name=httpd state=installed
+      run_once: true
+   
+    - name: restart service
+      service: name=httpd state=started
+ 

@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Before Download Tomcat check version
+      uri: 
+        url: http://apache.cs.utah.edu/tomcat/tomcat-9/v9.0.27/bin/ 
+        method: GET
+        return_content: yes
+        force_basic_auth: yes
+        status_code: 201
+        body_format: json
+      register: out
+
+#    - name: Download tomcat 
+ #     get_url: 
+  #      url: http://apache.cs.utah.edu/tomcat/tomcat-9/v9.0.27/bin/     
+   #   changed_when: "{{ 'el8' in out.content"
+ 
