@@ -1,0 +1,24 @@
+- hosts: localhost
+  become: true
+  vars: 
+    src_file: /opt/file14
+    dest_file: /opt/file15
+  tasks: 
+    - name: find example
+      find: 
+        path: /opt
+        patterns: "**"
+      register: filematch
+
+    - debug: msg={{ filematch }}
+   
+    - name: Ensure that file exist
+      command: ls -l "{{ src_file }}"
+      ignore_errors: true
+      register: file_stat
+
+    - name: command execution 
+      command: '/bin/mv "{{ src_file }}" "{{ dest_file }}"'
+      register: file_stat_change
+      when: '"src_file" not in filematch'
+      
