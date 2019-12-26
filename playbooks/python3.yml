@@ -11,14 +11,28 @@
         - openssl-devel
         - bzip2-devel
    
-     - name: Download Python3 
-       get_url: 
-         url: https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
-         path: /tmp
+    - name: Download Python3 
+      get_url: 
+        url: https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
+        dest: /tmp
       
-     - name: Extract tar file
-       unarchive: 
-         src: /tmp/Python-3.7.2.tgz
-         dest: /usr/src
+    - name: Extract tar file
+      unarchive: 
+        src: /tmp/Python-3.7.2.tgz
+        dest: /usr/src
          
-        
+    - name: Compile Python 
+      command: "{{ item }}"
+      with_items: 
+        - /usr/src/Python-3.7.2/configure 
+        - make 
+        - make install 
+
+    - name: make an entry into bashrc file
+      lineinfile: 
+        line: "alias python='/usr/local/bin/python3.7.2"
+        path: /root/.bashrc
+         
+    
+
+

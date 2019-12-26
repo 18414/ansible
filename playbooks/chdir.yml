@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+  - name: Run
+    shell: 
+      chdir: /tmp
+      cmd: sh abc.sh
+
