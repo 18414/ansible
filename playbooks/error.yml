@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Check for archive file
+      command: ls /root/archive.tar
+      register: check_result
+      ignore_errors: true
+    - name: Touch archive file
+      file: 
+        path: /root/archive.tar
+        state: touch
+      when: check_result is failed

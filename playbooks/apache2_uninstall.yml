@@ -5,11 +5,11 @@
   gather_facts: yes
   tasks: 
     - name: Install apache on ubuntu
-      apt: name=apache2 state=latest
+      apt: name=apache2 state=absent
       when: ansible_os_family == "Debian"
 
     - name: Install apache on centOS
-      yum: name=httpd state=latest
+      yum: name=httpd state=absent
       when: ansible_os_family == "RedHat"
 
     - name: start apache service on Debian

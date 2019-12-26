@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  become: true
+  tasks:   
+    - name: Create dir
+      file: 
+        name: bhushan1
+        state: file
+        path: /tmp
