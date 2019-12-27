@@ -32,13 +32,22 @@
         src: /tmp/Python-3.7.2.tgz
         dest: /usr/src/python3
         extra_opts: [--strip-components=1]
-         
-    - name: Compile Python 
-      command: "{{ item }}"
+  
+    - name: Execute commands 
+      shell: "{{ item }}"
+      args: 
+        chdir: /usr/src/python3
       with_items: 
-        - /usr/src/python3/configure 
-        - make 
-        - make install 
+        - configure
+        - make
+        - make install
+
+#    - name: Compile Python 
+#      command: "{{ item }}"
+#      with_items: 
+#        - /usr/src/python3/configure 
+#        - make 
+ #       - make install 
 
     - name: make an entry into bashrc file
       lineinfile: 
