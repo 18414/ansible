@@ -30,8 +30,11 @@
 
     - name: make an entry into bashrc file
       lineinfile: 
-        line: "alias python='/usr/local/bin/python3.7.2"
-        path: /root/.bashrc
+        line: "alias python='/usr/local/bin/python3.7.2'"
+        path: /etc/environment
+
+    - name: Run source
+      shell: "source /etc/environment"
          
     
 
