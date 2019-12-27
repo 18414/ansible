@@ -16,26 +16,39 @@
         url: https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
         dest: /tmp
       
+    - name: Check /usr/src/python3 exist status
+      stat: 
+        path: /usr/src/python3
+      register: dirstat
+  
+    - name: Create python3 directory if not exist
+      file: 
+        name: /usr/src/python3
+        state: directory
+      when: dirstat.stat.exists == False 
+
     - name: Extract tar file
       unarchive: 
         src: /tmp/Python-3.7.2.tgz
-        dest: /usr/src
+        dest: /usr/src/python3
+        extra_opts: [--strip-components=1]
          
     - name: Compile Python 
       command: "{{ item }}"
       with_items: 
-        - /usr/src/Python-3.7.2/configure 
+        - /usr/src/python3/configure 
         - make 
         - make install 
 
     - name: make an entry into bashrc file
       lineinfile: 
-        line: "alias python='/usr/local/bin/python3.7.2'"
-        path: /etc/environment
+        line: "alias python='/usr/local/bin/python3'"
+        path: "/root/.bashrc"
 
     - name: Run source
-      shell: "source /etc/environment"
+      shell: "source /root/.bashrc"
          
     
+#ln -s /usr/local/bin/python3 /usr/local/bin/python3.7.2
 
 

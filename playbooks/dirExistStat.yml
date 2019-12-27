@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Check /usr/src/python3 exist status
+      stat:
+        path: /usr/src/python3
+      register: dirstat
+
+    - name: Create python3 directory if not exist
+      file:
+        name: /usr/src/python3
+        state: directory
+      when: dirstat.stat.exists == False
+
+
