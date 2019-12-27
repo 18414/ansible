@@ -34,30 +34,31 @@
         extra_opts: [--strip-components=1]
   
     - name: Execute commands 
+      shell: ./configure
+      args: 
+        chdir: /usr/src/python3
+     
+    - name: Compile Python 
       shell: "{{ item }}"
       args: 
         chdir: /usr/src/python3
       with_items: 
-        - configure
-        - make
-        - make install
-
-#    - name: Compile Python 
-#      command: "{{ item }}"
-#      with_items: 
-#        - /usr/src/python3/configure 
-#        - make 
- #       - make install 
+        - /usr/bin/make 
+        - /usr/bin/make install 
 
     - name: make an entry into bashrc file
       lineinfile: 
         line: "alias python='/usr/local/bin/python3'"
         path: "/root/.bashrc"
+      
 
     - name: Run source
       shell: "source /root/.bashrc"
          
     
-#ln -s /usr/local/bin/python3 /usr/local/bin/python3.7.2
-
-
+    - name: Create softlink
+      file: 
+        src: /usr/local/bin/python3
+        dest: /usr/local/bin/python3.7.2
+        state: link
+       
