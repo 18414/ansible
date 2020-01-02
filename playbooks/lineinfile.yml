@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Make entry into inventory
+      lineinfile:
+        dest: /etc/ansible/hosts
+        #regexp: '^172.28.38.170'
+        insertafter: '10.25.1.56$'
+        line: "ansible_ssh_private_key_file=/home/ansible/aws.pem"
+

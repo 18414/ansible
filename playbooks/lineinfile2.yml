@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Add AWS key to the ansible.cfg
+      lineinfile:
+        path: /etc/ansible/ansible.cfg
+        regexp: "^#private_key_file"
+        line: "private_key_file=/home/ansible/aws.pem"
+        state: present
+

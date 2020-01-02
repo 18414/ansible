@@ -1,7 +1,7 @@
 ---
-- hosts: webservers
-  user: ansible
-  sudo: yes
+- hosts: localhost
+  #user: ansible
+  #sudo: yes
   connection: ssh
   gather_facts: no
   vars: 
@@ -9,7 +9,7 @@
   tasks: 
     - name: Local Variable Display
       set_fact:
-        singlefact: SOMETHING
+        myVar: Ansible_Geek
     - debug: msg={{ playbook_version }}   
-    - debug: msg={{ singlefact }}
+    - debug: msg={{ myVar }}
   
