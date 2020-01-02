@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Add group name into inventory
+      lineinfile:
+        path: /etc/ansible/hosts
+        line: "[webgroup:vars]"
+
+    - name: Add pem key after group
+      lineinfile:
+        path: /etc/ansible/hosts
+        insertafter: "[webgroup:vars]"
+        line: "ansible_ssh_private_key_file=/home/ansible/aws.pem"
+        state: present
+
+
