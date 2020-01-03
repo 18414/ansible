@@ -1,12 +1,19 @@
 ---
-- hosts: all
-  gather_facts: false
+- hosts: master
+  gather_facts: true
+  remote_user: ansible
   vars: 
-    ssh_keys: '/root/.ssh/id_rsa.pub'
+    ssh_keys: '/home/ansible/.ssh/id_rsa.pub'
   tasks: 
     - name: copy ssh key
       authorized_key: 
-        key: "{{ lookup('file', ssh_key) }}"
-        user: root
+        user: ansible
+        manage_dir: true
+        key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+        state: present
+      delegate_to: "{{ item }}"
+      with_items: 
+        - node1
+        - node2
 
   
