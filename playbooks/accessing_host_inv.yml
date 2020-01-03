@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - debug:
+        msg: "{{ ansible_ssh_host }}" 
