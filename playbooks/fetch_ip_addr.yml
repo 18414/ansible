@@ -1,0 +1,8 @@
+---
+- hosts: node1
+  become: true
+  tasks: 
+    - name: Test hosts list
+      debug:
+        msg: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
