@@ -9,10 +9,17 @@
     - debug: msg={{ firestat }}
 
     - name: Stop firwalld if running
-      service:
-        name: firewalld
-        state: stopped
-        enabled: False
-      when: firestat.stdout == active
+      command: systemctl stop firewalld
+      #when: firestat == 'active'
+      register: statser
+#    - name: Stop firwalld if running
+ #     service:
+  #      name: firewalld
+   #     state: stopped
+    #    enabled: False
+     # when: firestat.stdout_lines == 'active' 
+     # register: statser
+    
+    - debug: msg={{ statser }}
 
 

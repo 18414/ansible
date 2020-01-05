@@ -1,0 +1,10 @@
+---
+- hosts: master
+  become: true
+  tasks: 
+    - name: Get token list
+      shell: kubeadm token list
+      register: kubjoin
+      
+    - debug:
+        msg: "{{ kubjoin.stdout_lines[1].split()[0] }}" 
