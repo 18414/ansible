@@ -8,3 +8,11 @@
       
     - debug:
         msg: "{{ kubjoin.stdout_lines[1].split()[0] }}" 
+
+    - name: Create CA-CERT
+      shell: "openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'"
+      register: cacert
+    
+    - debug: 
+        msg: "{{ cacert.stdout }}"
+
