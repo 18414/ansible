@@ -1,0 +1,18 @@
+---
+- hosts: master
+  become: true
+  tasks: 
+    - name: Stop firwalld if running
+      command: systemctl status firewalld 
+      register: firestat
+    
+    - debug: msg={{ firestat }}
+
+    - name: Stop firwalld if running
+      service:
+        name: firewalld
+        state: stopped
+        enabled: False
+      when: firestat.stdout == active
+
+
