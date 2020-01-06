@@ -1,9 +1,9 @@
 ---
-- hosts: localhost
+- hosts: master
   #user: ansible
   #sudo: yes
   connection: ssh
-  gather_facts: no
+  gather_facts: yes
   vars: 
     playbook_version: 0.1
   tasks: 
@@ -12,4 +12,11 @@
         myVar: Ansible_Geek
     - debug: msg={{ playbook_version }}   
     - debug: msg={{ myVar }}
+  
+    - name: Bring private ip of remote server
+      set_fact: 
+        privateip: "{{ ansible_all_ipv4_addresses  }}"
+    
+    - debug: msg={{ privateip }}
+
   
