@@ -15,8 +15,11 @@
   
     - name: Bring private ip of remote server
       set_fact: 
-        privateip: "{{ ansible_all_ipv4_addresses  }}"
+        privateip: "{{ ansible_eth0.ipv4.address }}"
+    #  delegate_to: "{{ item }}"
+     # with_items: "{{ groups['master'] }}"
     
     - debug: msg={{ privateip }}
 
-  
+
+ 
