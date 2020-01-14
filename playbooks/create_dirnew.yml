@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+    - name: Manage Cluster as Regular User
+      shell: |
+        /bin/mkdir -p $HOME/.kube
+        /bin/cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        /bin/chown $(id -u):$(id -g) $HOME/.kube/config
+      async: 60
+      poll: 05
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['master'] }}"
+
+

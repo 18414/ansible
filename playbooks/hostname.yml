@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: find hostname 
+      setup: 
+        filter: ansible_hostname

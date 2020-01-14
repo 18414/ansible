@@ -1,5 +1,5 @@
 ---
-- hosts: master
+- hosts: localhost
   #user: ansible
   #sudo: yes
   connection: ssh
@@ -16,8 +16,9 @@
     - name: Bring private ip of remote server
       set_fact: 
         privateip: "{{ ansible_eth0.ipv4.address }}"
-    #  delegate_to: "{{ item }}"
-     # with_items: "{{ groups['master'] }}"
+        delegate_facts: True
+        delegate_to: "{{ item }}"
+      with_items: "{{ groups['master'] }}"
     
     - debug: msg={{ privateip }}
 

@@ -9,10 +9,16 @@
     - debug:
         msg: "{{ kubjoin.stdout_lines[1].split()[0] }}" 
 
+    - debug:
+        msg: "{{ kubjoin.stdout_lines }}" 
+
     - name: Create CA-CERT
       shell: "openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'"
       register: cacert
-    
+   
+    - name: kubeadm token create 
+      command: kubeadm token create
+      register: ck
     - debug: 
-        msg: "{{ cacert.stdout }}"
+        msg: "{{ ck }}"
 

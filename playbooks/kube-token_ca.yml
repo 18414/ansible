@@ -1,0 +1,46 @@
+---
+- hosts: master
+  become: true
+  tasks: 
+  - name: Get token list
+    shell: kubeadm token list
+    register: kubetoken
+#    delegate_facts: true
+ #   delegate_to: "{{ item }}"
+  #  with_items: "{{ groups['master'] }}"
+    tags: t
+
+ # - set_fact:
+  #    tokennew: "{{ kubetoken }}"
+#    delegate_to: "{{ item }}"
+ #   delegate_facts: true
+  #  with_items: "{{ groups['master'] }}"
+
+#  - debug: msg={{ tokennew.stdout_lines[1].split()[0] }}
+
+#  - debug: 
+ #     msg: "{{ tokennew.start }}"
+     
+  - debug: 
+      msg: "{{ kubetoken.stdout_lines[1].split()[0] }}"
+
+  - name: Create CA-CERT
+    shell: "openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'"
+    register: cacert
+    tags: t
+  #  delegate_facts: true
+   # delegate_to: "{{ item }}"
+#    with_items: "{{ groups['master'] }}"
+    tags: t
+
+ # - name: Fetch register variable 
+  #  set_fact:
+   #   cacertnew: "{{ cacert }}"
+   # delegate_to: "{{ item }}"
+   # delegate_facts: true
+   # with_items: "{{ groups['master'] }}"
+#
+  - debug: msg={{ cacert }}
+  - debug: 
+      var: "{{ cacertnew.stdout }}"
+

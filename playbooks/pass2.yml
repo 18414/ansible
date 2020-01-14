@@ -1,0 +1,19 @@
+---
+- hosts: master
+  become: true
+  tasks:
+    - debug: msg={{ newtoken }}
+
+    - debug: msg={{ newcert }}
+
+    - name: join worker node
+      command: "kubeadm join 172.31.81.20:6443 --token {{ kubetoken.stdout_lines[1].split()[0] }}  --discovery-token-ca-cert-hash sha256:{{ cacert.stdout }}"
+      #command: "kubeadm join {{ mprivateip }}:6443 --token {{ kubetoken.stdout_lines[1].split()[0] }}  --discovery-token-ca-cert-hash sha256:{{ cacert.stdout }}"
+      register: joinwork
+      delegate_facts: true
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['worker'] }}"
+      tags: t
+
+
+

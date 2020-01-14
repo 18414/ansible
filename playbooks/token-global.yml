@@ -1,0 +1,4 @@
+---
+# Combine multiple playbooks
+- import_playbook: pass1.yml 
+- import_playbook: pass2.yml 

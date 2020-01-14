@@ -1,0 +1,33 @@
+- hosts: localhost
+  become: true
+  tasks: 
+    - name: Add host into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #home/ansible/spinup-ec2instance/inventory/hosts
+        line: "[cluster]"
+        
+
+    - name: Add host into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #/home/ansible/spinup-ec2instance/inventory/hosts
+        line: '10.10.10.10'
+
+
+    - name: Add host into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #home/ansible/spinup-ec2instance/inventory/hosts
+        line: '[all:vars]'
+
+    - name: Add space between lines
+      blockinfile: 
+        dest: /etc/ansible/hosts
+        insertbefore: '[all:vars]'
+        block: |2
+            line0
+
+    - name: Add host into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #/home/ansible/spinup-ec2instance/inventory/hosts
+        insertafter: '[all:vars]'
+        line: ansible_ssh_private_key_file=/home/ansibe/aws.pem
+         
