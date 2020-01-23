@@ -1,0 +1,7 @@
+---
+- name: Add entry into 
+  hosts: localhost
+  become: true
+  tasks: 
+    - shell: 'cat /etc/resolve.conf'
+      register: command_output

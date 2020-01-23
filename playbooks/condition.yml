@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  become: true
+  tasks:   
+    - command: service docker status
+      register: result
+
+    - debug: msg={{ result }}
+
+    - mail: 
+        to: bmahajan0@gmail.com 
+        subject: Service Alert
+        body: Httpd service is down
+      when: result.stdout.find('down') != -1

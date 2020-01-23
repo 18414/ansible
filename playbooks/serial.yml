@@ -1,20 +1,20 @@
 ---
-- hosts: local
+- hosts: all
   become: true
   serial: # Execute command on all hosts at a time or parallaly
-     - 1
+     - 2
  #   - 2 
 #    - 50% 
   tasks:
     - name: Install Apache
       yum: 
-        name: httpd
-        state: latest
+        name: php*
+        state: present
 
-    - name: Start and enable the service
-      service: 
-        name: httpd
-        state: started
+#    - name: Start and enable the service
+ #     service: 
+  #      name: httpd
+   #     state: started
        # enabled: yes
     - name: Create index file
       file: 

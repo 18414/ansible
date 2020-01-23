@@ -1,0 +1,64 @@
+---
+- hosts: localhost
+  become: true
+  vars: 
+    - master: 192.168.0.1
+    - worker: 192.168.0.2
+  tasks: 
+    - name: Append group name into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #home/ansible/spinup-ec2instance/inventory/hosts
+        line: '[cluster]'
+
+    - name: Append group name into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #home/ansible/spinup-ec2instance/inventory/hosts
+        line: '[master]'
+
+    - name: Append group name into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #home/ansible/spinup-ec2instance/inventory/hosts
+        line: '[worker]'
+
+    - name: Add host into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #/home/ansible/spinup-ec2instance/inventory/hosts
+        insertafter: '^[cluster]'
+        line: '{{ item }}'
+      with_items: 
+        - "192.168.0.1"
+        - "192.168.0.2"
+        
+    - name: Add host into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #/home/ansible/spinup-ec2instance/inventory/hosts
+        insertafter: '^[master]'
+        line: '{{ item }}'
+      with_items: 
+        - "192.168.0.1"
+
+    - name: Add host into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #/home/ansible/spinup-ec2instance/inventory/hosts
+        insertafter: '[worker]'
+        line: '{{ item }}'
+      with_items: 
+        - "192.168.0.2"
+
+    - name: Add host group vars into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #home/ansible/spinup-ec2instance/inventory/hosts
+        line: '[cluster:vars]'
+    - name: Add pem key file into the inventory
+
+      lineinfile:
+        path: /etc/ansible/hosts #/home/ansible/spinup-ec2instance/inventory/hosts
+        insertafter: '[cluster:vars]'
+        line: ansible_ssh_private_key_file=/home/ansible/aws.pem
+
+    - name: Add pem key file into the inventory
+      lineinfile:
+        path: /etc/ansible/hosts #/home/ansible/spinup-ec2instance/inventory/hosts
+        insertafter: '[cluster:vars]'
+        line: ansible_user=centos
+
