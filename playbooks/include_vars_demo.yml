@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+    - include_vars: 
+        file: ./myvar.yml
+        name: included_variable
+    - debug: var=included_variable
