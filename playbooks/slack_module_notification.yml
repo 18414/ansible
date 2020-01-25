@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  tasks: 
+    - name: Send notification message via slack
+      local_action: 
+        module: slack
+        msg: "Hello I AM BHUSHAN"
+        channel: "aa"    
+        username: "Ansible-host"

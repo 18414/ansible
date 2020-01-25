@@ -1,0 +1,22 @@
+### dic var
+---
+- hosts: localhost
+  become: true
+  tasks: 
+    - shell: 'false'
+      register: e1
+      ignore_errors: yes
+
+    - set_fact: 
+        foo: '{{ bar }}'
+      register: e2
+      ignore_errors: true
+
+    - debug: msg="test"
+      register: e3
+
+    - debug: var="[e1, e2, e3]" 
+
+    - set_fact:
+        success: '{{ not ([e1, e2, e3] |map(attribute="failed") |max) }}'
+    - debug: var=success
