@@ -4,13 +4,9 @@
   gather_facts: no
   tasks:
    - name: Download MySQL rpm
-     get_url:
-       url:  http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-       dest: /tmp/mysql-community-release-el7-5.noarch.rpm
-  
-   - name: Install MySQL  repo
-     command: rpm -ivh /tmp/mysql-community-release-el7-5.noarch.rpm
-     ignore_errors: true
+     yum:    
+       name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+       state: present
   
    - name: Install MySQL
      yum: 
@@ -26,12 +22,16 @@
        state: started
        enabled: yes
   
+
+   - name: Create databse 
+     mysql_db:
+       name: gym_management_system
+       state: present
+
    - name: import DB to MySQL
      mysql_db: 
-       name: gym_management_system
-       login_user: bhushan
-       login_password: "{{ passwd }}"
-       target: gym_management_system.sql
        state: import
-    
+       name: gym_management_system 
+       target: gym_management_system.sql
+        
     
