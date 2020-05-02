@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  vars: 
+    inv_file: bhushaninv.txt 
+  tasks: 
+  - name: Create file
+    file: 
+      path: "{{ inv_file }}"
+      state: touch
+
+  - name: generate inventory
+    lineinfile: 
+      path: "{{ inv_file }}"
+      line: "{{ groups['webserver']|join(' ') }}"
+

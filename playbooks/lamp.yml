@@ -1,0 +1,47 @@
+---
+- hosts: lamp
+  become: true
+  gather_facts: true
+  tasks: 
+    - name: Update install apache2
+      apt: 
+        name: "{{ item }}"
+        state: latest
+        update_cache: yes
+      with_items:
+       - mysql-server
+       - apache2
+       - php
+       - curl
+       - php-myadmin
+
+    - name: Create index file
+      file: 
+        path: /var/www/html/index.html
+        state: touch
+   
+    - name: Append data in index.html
+      lineinfile: 
+        path: /var/www/html/index.html
+        line: "SANJAY is LAMP Master"
+        
+    - name: start Apache2 service
+      service: 
+        name: "{{ item }}" 
+        state: started
+      with_items: 
+        - apache2
+        - mysql
+
+    - name: Check status of URL
+      uri: 
+        url: http://34.205.76.72:80
+      register: check_site  
+
+    
+    - name: Check the status of the URL
+      debug: msg={{ check_site }}
+    
+
+
+
